@@ -60,7 +60,16 @@
                 Margin="5,5,10,0"
                 IsReadOnly="True">
 
-            </DataGrid>
+				<DataGrid.Columns>
+
+					<DataGridTextColumn Header="CustomerID" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=customerId}"/>
+					<DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=customerName}"/>
+					<DataGridTextColumn Header="Address" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=address}"/>
+					<DataGridTextColumn Header="Phone" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=phone}"/>
+
+				</DataGrid.Columns>
+
+			</DataGrid>
 
             <Button x:Name="AddCustomerButton"
 

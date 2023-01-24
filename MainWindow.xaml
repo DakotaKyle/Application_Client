@@ -52,6 +52,7 @@
             </Label>
 
             <DataGrid x:Name="CustomerRecordDataGrid" AutoGenerateColumns="False"
+					  ItemsSource="{Binding}"
                       
                 FontFamily="Times New Roman"
                 FontSize="16"

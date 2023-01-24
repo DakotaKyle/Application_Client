@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +32,33 @@ namespace Application_Client
 
             if (login.isvalid == true)
             {
-                Show();
+                String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
+                MySqlConnection connection = new(connectionString);
+                MySqlCommand cmd = new("SELECT * FROM customer", connection);
+
+                try
+                {                
+                    connection.Open();
+                    DataTable dt = new();
+                    dt.Load(cmd.ExecuteReader());
+                    connection.Close();
+
+					CustomerRecordDataGrid.DataContext = dt;
+
+                    Show();
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+				finally
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                }
+
             }
             else
             {

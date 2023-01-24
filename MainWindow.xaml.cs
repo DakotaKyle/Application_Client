@@ -22,6 +22,10 @@ namespace Application_Client
     /// </summary>
     public partial class MainWindow : Window
     {
+
+       public static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
+       public MySqlConnection connection = new(connectionString);
+
         public MainWindow()
         {
 
@@ -32,38 +36,50 @@ namespace Application_Client
 
             if (login.isvalid == true)
             {
-                String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
-                MySqlConnection connection = new(connectionString);
-                MySqlCommand cmd = new("SELECT customer.customerId, customer.customerName, address.phone, CONCAT(address.address, ', ', city.city, ', ', country.country, ' ', address.postalCode) AS address FROM customer JOIN address ON customer.addressId = address.addressId JOIN city ON address.cityId = city.cityId JOIN country ON city.countryId = country.countryId", connection);
-
-                try
-                {                
-                    connection.Open();
-                    DataTable dt = new();
-                    dt.Load(cmd.ExecuteReader());
-                    connection.Close();
-
-					CustomerRecordDataGrid.DataContext = dt;
-
-                    Show();
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-				finally
-                {
-                    if (connection != null)
-                    {
-                        connection.Close();
-                    }
-                }
-
+                grabCustomerData();
+                grabScheduleData();
+                Show();
             }
             else
             {
                 Close();
             }
+        }
+
+        private void grabCustomerData()
+        {
+
+            
+            MySqlCommand customerData = new("SELECT customer.customerId, customer.customerName, address.phone, CONCAT(address.address, ', ', city.city, ', ', country.country, ' ', address.postalCode) AS address FROM customer JOIN address ON customer.addressId = address.addressId JOIN city ON address.cityId = city.cityId JOIN country ON city.countryId = country.countryId", connection);
+
+            try
+            {
+                connection.Open();
+
+                DataTable customerTable = new();
+                customerTable.Load(customerData.ExecuteReader());
+
+                connection.Close();
+
+                CustomerRecordDataGrid.DataContext = customerTable;
+
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public void grabScheduleData()
+        {
+
         }
 
         private void AddCustomerButton_Click(object sender, RoutedEventArgs e)

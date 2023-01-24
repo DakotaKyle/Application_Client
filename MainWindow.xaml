@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Application_Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="800" Width="1200">
     
     <Grid>
         
@@ -62,10 +62,10 @@
 
 				<DataGrid.Columns>
 
-					<DataGridTextColumn Header="CustomerID" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=customerId}"/>
-					<DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=customerName}"/>
-					<DataGridTextColumn Header="Address" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=address}"/>
-					<DataGridTextColumn Header="Phone" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=phone}"/>
+					<DataGridTextColumn Header="CustomerID" FontFamily="Times New Roman" Width="45*" Binding="{Binding Path=customerId}"/>
+					<DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="65*" Binding="{Binding Path=customerName}"/>
+					<DataGridTextColumn Header="Address" FontFamily="Times New Roman" Width="110*" Binding="{Binding Path=address}"/>
+					<DataGridTextColumn Header="Phone" FontFamily="Times New Roman" Width="50*" Binding="{Binding Path=phone}"/>
 
 				</DataGrid.Columns>
 

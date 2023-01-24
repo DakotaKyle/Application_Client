@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Application_Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1200">
+        Title="MainWindow" Height="600" Width="800">
     
     <Grid>
         
@@ -31,7 +31,7 @@
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Bottom"
                 FontFamily="Times New Roman"
-                FontSize="36" 
+                FontSize="24" 
                 Margin="15,25,0,0">
 
             </Label>

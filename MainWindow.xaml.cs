@@ -80,6 +80,31 @@ namespace Application_Client
         public void grabScheduleData()
         {
 
+            MySqlCommand appointmentData = new("SELECT customer.customerName, appointment.type, appointment.start, appointment.end FROM customer JOIN appointment ON customer.customerId = appointment.customerId", connection);
+
+            try
+            {
+                connection.Open();
+
+                DataTable appointmentTable = new();
+                appointmentTable.Load(appointmentData.ExecuteReader());
+
+                connection.Close();
+
+                AppointmentDataGrid.DataContext = appointmentTable;
+
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    connection.Close();
+                }
+            }
         }
 
         private void AddCustomerButton_Click(object sender, RoutedEventArgs e)

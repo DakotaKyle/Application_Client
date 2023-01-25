@@ -158,12 +158,22 @@
             </Button>
 
             <DataGrid x:Name="AppointmentDataGrid" AutoGenerateColumns="False"
+            ItemsSource="{Binding}"
 
                 FontFamily="Times New Roman"
                 FontSize="16"
                 Height="375"
                 Margin="10,5,5,0"
                 IsReadOnly="True">
+
+              <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="60*" Binding="{Binding Path=customerName}"/>
+                <DataGridTextColumn Header="Appointment Type" FontFamily="Times New Roman" Width="60*" Binding="{Binding Path=type}"/>
+                <DataGridTextColumn Header="Start" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=start}"/>
+                <DataGridTextColumn Header="End" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=end}"/>
+                
+              </DataGrid.Columns>
 
             </DataGrid>
 

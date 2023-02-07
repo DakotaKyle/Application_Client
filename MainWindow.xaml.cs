@@ -23,8 +23,8 @@ namespace Application_Client
     public partial class MainWindow : Window
     {
 
-       public static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
-       public MySqlConnection connection = new(connectionString);
+       private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
+       private MySqlConnection connection = new(connectionString);
 
         public MainWindow()
         {
@@ -36,8 +36,8 @@ namespace Application_Client
 
             if (login.isvalid == true)
             {
-                grabCustomerData();
-                grabScheduleData();
+                getCustomerData();
+                getScheduleData();
                 Show();
             }
             else
@@ -46,10 +46,9 @@ namespace Application_Client
             }
         }
 
-        private void grabCustomerData()
+        private void getCustomerData()
         {
 
-            
             MySqlCommand customerData = new("SELECT customer.customerId, customer.customerName, address.phone, CONCAT(address.address, ', ', city.city, ', ', country.country, ' ', address.postalCode) AS address FROM customer JOIN address ON customer.addressId = address.addressId JOIN city ON address.cityId = city.cityId JOIN country ON city.countryId = country.countryId", connection);
 
             try
@@ -77,7 +76,7 @@ namespace Application_Client
             }
         }
 
-        public void grabScheduleData()
+        public void getScheduleData()
         {
 
             MySqlCommand appointmentData = new("SELECT customer.customerName, appointment.type, appointment.start, appointment.end FROM customer JOIN appointment ON customer.customerId = appointment.customerId", connection);

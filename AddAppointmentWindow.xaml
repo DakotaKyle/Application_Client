@@ -7,11 +7,230 @@
         mc:Ignorable="d"
         Title="AddAppointmentWindow" Height="600" Width="450"
         MaxHeight="800" MaxWidth="600">
-    
+
     <Grid>
-        
-        
-        
+
+        <Grid.ColumnDefinitions>
+
+            <ColumnDefinition Width="101*"/>
+            <ColumnDefinition Width="124*"/>
+
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+
+            <Label x:Name="NameLabel"
+
+                Content="Name"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Margin="0,95,20,0">
+
+            </Label>
+
+            <Label x:Name="AppointmentLabel"
+
+                Content="Appointment"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Margin="0,40,20,0">
+
+            </Label>
+
+            <Label x:Name="StartLabel"
+
+                Content="Start"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Margin="0,55,20,0">
+
+            </Label>
+
+            <ComboBox x:Name="StartComboBox"
+                
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Width="100"
+                Margin="0,0,50,0">
+
+                <ComboBoxItem Content="1:00"/>
+                <ComboBoxItem Content="1:30"/>
+                <ComboBoxItem Content="2:00"/>
+                <ComboBoxItem Content="2:30"/>
+                <ComboBoxItem Content="3:00"/>
+                <ComboBoxItem Content="3:30"/>
+                <ComboBoxItem Content="4:00"/>
+                <ComboBoxItem Content="4:30"/>
+                <ComboBoxItem Content="5:00"/>
+                <ComboBoxItem Content="5:30"/>
+                <ComboBoxItem Content="6:00"/>
+                <ComboBoxItem Content="6:30"/>
+                <ComboBoxItem Content="7:00"/>
+                <ComboBoxItem Content="7:30"/>
+                <ComboBoxItem Content="8:00"/>
+                <ComboBoxItem Content="8:30"/>
+                <ComboBoxItem Content="9:00"/>
+                <ComboBoxItem Content="9:30"/>
+                <ComboBoxItem Content="10:00"/>
+                <ComboBoxItem Content="10:30"/>
+                <ComboBoxItem Content="11:00"/>
+                <ComboBoxItem Content="11:30"/>
+                <ComboBoxItem Content="12:00"/>
+                <ComboBoxItem Content="12:30"/>
+
+            </ComboBox>
+
+            <ComboBox x:Name="StartTimeComboBox"
+                
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="19"
+                Width="60"
+                Margin="0,-35,-125,0">
+
+                <ComboBoxItem Content="AM"/>
+                <ComboBoxItem Content="PM"/>
+
+            </ComboBox>
+
+            <Button x:Name="AddAppointmentButton"
+
+                Content="Add"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="14"
+                Margin="0,25,0,0"
+                Height="30"
+                Width="40"
+                Cursor="Hand"
+                Click="AddButton_Click">
+
+            </Button>
+
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+
+            <TextBox x:Name="NameTextBox"
+                     
+                Text=""
+                TextWrapping="Wrap"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="22"
+                Width="200"
+                Height="31"
+                Margin="0,100,20,0">
+
+            </TextBox>
+
+            <ComboBox x:Name="AppointmentComboBox"
+                
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Width="200"
+                Margin="0,45,20,0">
+
+                <ComboBoxItem Content="Presentation"/>
+                <ComboBoxItem Content="Scrum"/>
+                <ComboBoxItem Content="Stackholder"/>
+                <ComboBoxItem Content="Change Control"/>
+                <ComboBoxItem Content="Status Review"/>
+                <ComboBoxItem Content="Lessons Learned"/>
+
+            </ComboBox>
+
+            <Label x:Name="EndLabel"
+
+                Content="End"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Margin="0,55,20,0">
+
+            </Label>
+
+            <ComboBox x:Name="EndComboBox"
+                
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Width="100"
+                Margin="0,0,50,0">
+
+                <ComboBoxItem Content="1:00"/>
+                <ComboBoxItem Content="1:30"/>
+                <ComboBoxItem Content="2:00"/>
+                <ComboBoxItem Content="2:30"/>
+                <ComboBoxItem Content="3:00"/>
+                <ComboBoxItem Content="3:30"/>
+                <ComboBoxItem Content="4:00"/>
+                <ComboBoxItem Content="4:30"/>
+                <ComboBoxItem Content="5:00"/>
+                <ComboBoxItem Content="5:30"/>
+                <ComboBoxItem Content="6:00"/>
+                <ComboBoxItem Content="6:30"/>
+                <ComboBoxItem Content="7:00"/>
+                <ComboBoxItem Content="7:30"/>
+                <ComboBoxItem Content="8:00"/>
+                <ComboBoxItem Content="8:30"/>
+                <ComboBoxItem Content="9:00"/>
+                <ComboBoxItem Content="9:30"/>
+                <ComboBoxItem Content="10:00"/>
+                <ComboBoxItem Content="10:30"/>
+                <ComboBoxItem Content="11:00"/>
+                <ComboBoxItem Content="11:30"/>
+                <ComboBoxItem Content="12:00"/>
+                <ComboBoxItem Content="12:30"/>
+
+            </ComboBox>
+
+            <ComboBox x:Name="EndTimeComboBox"
+                
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="19"
+                Width="60"
+                Margin="0,-35,-125,0">
+
+                <ComboBoxItem Content="AM"/>
+                <ComboBoxItem Content="PM"/>
+
+            </ComboBox>
+
+            <Button x:Name="CancelButton"
+
+                Content="Cancel"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="14"
+                Margin="10,25,0,0"
+                Height="30"
+                Width="50"
+                Cursor="Hand"
+                Click="CancelButton_Click">
+
+            </Button>
+
+        </StackPanel>
+
     </Grid>
-    
+
 </Window>

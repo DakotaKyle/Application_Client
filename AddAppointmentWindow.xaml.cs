@@ -23,5 +23,15 @@ namespace Application_Client
         {
             InitializeComponent();
         }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

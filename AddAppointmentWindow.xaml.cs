@@ -27,10 +27,23 @@ namespace Application_Client
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
 
+
+
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+
+            MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure you want to cancel? Any unsaved progress will be lost!","",MessageBoxButton.YesNo);
+
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                Close();
+            }
+            else if (messageBoxResult == MessageBoxResult.No)
+            {
+                return;
+            }
 
         }
     }

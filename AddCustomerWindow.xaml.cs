@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,10 @@ namespace Application_Client
     /// </summary>
     public partial class AddCustomerWindow : Window
     {
+
+        private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
+        private MySqlConnection connection = new(connectionString);
+
         public AddCustomerWindow()
         {
             InitializeComponent();
@@ -27,6 +32,46 @@ namespace Application_Client
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
 
+            int primaryKey;
+            MySqlCommand getForeignKey = new("SELECT addressId FROM address ORDER BY addressId Desc",connection);
+            String updateCustomerName = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@Name, @addressId, 0, 02/13/2023, 0, 0, 0)";
+            String updateCustomerAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@address, 0, 1, @zipCode, @phone, 0, 0, 0, 0)";
+
+            using (MySqlConnection con = new(connectionString)) {
+
+                try
+                {
+
+                    connection.Open();
+
+                    using (MySqlCommand addressCommand = new(updateCustomerAddress, connection))
+                    {
+
+                        addressCommand.Parameters.Add("@address", MySqlDbType.VarChar).Value = AddressTextBox.Text;
+                        addressCommand.Parameters.Add("@zipCode", MySqlDbType.VarChar).Value = ZipcodeTextBox.Text;
+                        addressCommand.Parameters.Add("@phone", MySqlDbType.VarChar).Value = PhoneTextBox.Text;
+
+                        addressCommand.ExecuteNonQuery();
+
+                        primaryKey = (int)getForeignKey.ExecuteScalar();
+                    }
+
+                    using (MySqlCommand nameCommand = new(updateCustomerName, connection))
+                    {
+
+                        nameCommand.Parameters.Add("@Name", MySqlDbType.VarChar).Value = NameTextBox.Text;
+                        nameCommand.Parameters.Add("addressId", MySqlDbType.Int32).Value = primaryKey;
+
+                        nameCommand.ExecuteNonQuery();
+                    }
+
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

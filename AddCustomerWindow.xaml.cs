@@ -32,10 +32,15 @@ namespace Application_Client
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
 
-            int primaryKey;
-            MySqlCommand getForeignKey = new("SELECT addressId FROM address ORDER BY addressId Desc",connection);
+            int addressPrimaryKey, countryPrimaryKey;
+
+            MySqlCommand getAddressForeignKey = new("SELECT addressId FROM address ORDER BY addressId Desc",connection);
+            MySqlCommand getCountryForeignKey = new("SELECT countryId FROM country ORDER BY countryId Desc", connection);
+
             String updateCustomerName = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@Name, @addressId, 0, 02/13/2023, 0, 0, 0)";
-            String updateCustomerAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@address, 0, 1, @zipCode, @phone, 0, 0, 0, 0)";
+            String updateCustomerAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@address, 0, @cityId, @zipCode, @phone, 0, 0, 0, 0)";
+            String updateCustomerCity = "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@city, @countryId, 07/17/2023, 0, 0, 0)";
+            String updateCustomerCountry = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@country, 07/17/2023, 0, 0, 0)";
 
             using (MySqlConnection con = new(connectionString)) {
 
@@ -44,24 +49,38 @@ namespace Application_Client
 
                     connection.Open();
 
+                    using (MySqlCommand countryCommand = new(updateCustomerCountry, connection))
+                    {
+                        countryCommand.Parameters.Add("@country", MySqlDbType.VarChar).Value = CountryTextBox.Text;
+                        countryCommand.ExecuteNonQuery();
+
+                        countryPrimaryKey = (int)getCountryForeignKey.ExecuteScalar();
+                    }
+
+                    using (MySqlCommand cityCommand = new(updateCustomerCity, connection))
+                    {
+                        cityCommand.Parameters.Add("@city", MySqlDbType.VarChar).Value = CityTextBox.Text;
+                        cityCommand.Parameters.Add("@countryId", MySqlDbType.Int32).Value = countryPrimaryKey;
+                        cityCommand.ExecuteNonQuery();
+                    }
+
                     using (MySqlCommand addressCommand = new(updateCustomerAddress, connection))
                     {
 
                         addressCommand.Parameters.Add("@address", MySqlDbType.VarChar).Value = AddressTextBox.Text;
                         addressCommand.Parameters.Add("@zipCode", MySqlDbType.VarChar).Value = ZipcodeTextBox.Text;
                         addressCommand.Parameters.Add("@phone", MySqlDbType.VarChar).Value = PhoneTextBox.Text;
-
+                        addressCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = countryPrimaryKey;
                         addressCommand.ExecuteNonQuery();
 
-                        primaryKey = (int)getForeignKey.ExecuteScalar();
+                        addressPrimaryKey = (int)getAddressForeignKey.ExecuteScalar();
                     }
 
                     using (MySqlCommand nameCommand = new(updateCustomerName, connection))
                     {
 
                         nameCommand.Parameters.Add("@Name", MySqlDbType.VarChar).Value = NameTextBox.Text;
-                        nameCommand.Parameters.Add("addressId", MySqlDbType.Int32).Value = primaryKey;
-
+                        nameCommand.Parameters.Add("addressId", MySqlDbType.Int32).Value = addressPrimaryKey;
                         nameCommand.ExecuteNonQuery();
                     }
 

@@ -25,24 +25,19 @@ namespace Application_Client
 
        private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
        private MySqlConnection connection = new(connectionString);
+       readonly LoginPage login = new();
 
         public MainWindow()
         {
-
-            InitializeComponent();
-            Hide();
-            LoginPage login = new();
-            login.ShowDialog();
-
             if (login.isvalid == true)
-            {
+            {          
                 getCustomerData();
                 getScheduleData();
-                Show();
+                InitializeComponent();
             }
             else
             {
-                Close();
+                login.ShowDialog();
             }
         }
 
@@ -125,6 +120,51 @@ namespace Application_Client
         private void DeleteCustomerButton_Click(object sender, RoutedEventArgs e)
         {
 
+            int customerPrimaryKey, addressPrimaryKey, countryPrimaryKey;
+
+            //MySqlCommand getCustomerPrimaryKey = new("SELECT customerId FROM Customer WHERE customerId=@customerId", connection);
+            //MySqlCommand getAddressPrimaryKey = new("SELECT addressId FROM address ORDER BY addressId Desc", connection);
+            //MySqlCommand getCountryPrimaryKey = new("SELECT countryId FROM country ORDER BY countryId Desc", connection);
+            
+
+            String deleteCustomerName = "DELETE FROM customer WHERE customerId=@customerId";
+            //String deleteCustomerAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@address, 0, @cityId, @zipCode, @phone, 0, 0, 0, 0)";
+            //String deleteCustomerCity = "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@city, @countryId, 07/17/2023, 0, 0, 0)";
+            //String deleteCustomerCountry = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@country, 07/17/2023, 0, 0, 0)";
+
+
+            if (CustomerRecordDataGrid.SelectedItem != null)
+            {
+              
+
+                MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.","",MessageBoxButton.YesNo);
+
+                if (messageBox == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        connection.Open();
+
+                        using (MySqlCommand customerCommand = new(deleteCustomerName, connection))
+                        {
+                            customerCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = 
+                            customerCommand.ExecuteNonQuery();
+                        }
+
+                        connection.Close();
+
+                        Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex.Message);
+                    }
+                }
+                else if (messageBox == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
         }
 
         private void AddAppointmentButton_Click(object sender, RoutedEventArgs e)

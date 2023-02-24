@@ -24,13 +24,11 @@ namespace Application_Client
         private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
         private MySqlConnection connection = new(connectionString);
         private string username, password;
-
-        public bool isvalid { get; set; }
+        public static bool isvalid { get; set; }
 
         public LoginPage()
         {
             InitializeComponent();
-            isvalid = false;
         }
 
         private void authenticate()

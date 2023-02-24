@@ -85,6 +85,8 @@ namespace Application_Client
                     }
 
                     connection.Close();
+
+                    MainWindow main = new();
                 }
                 catch (Exception ex)
                 {

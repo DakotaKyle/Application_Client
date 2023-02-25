@@ -23,6 +23,7 @@ namespace Application_Client
 
         private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
         private MySqlConnection connection = new(connectionString);
+        CustomerList customerList = new();
 
         public AddCustomerWindow()
         {
@@ -32,11 +33,12 @@ namespace Application_Client
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
 
-            int customerId, addressId, countryId, addressPrimaryKey, countryPrimaryKey;
+            int customerId, addressPrimaryKey, countryPrimaryKey;
             String name, address, city, zip, country, phone;
 
             MySqlCommand getAddressForeignKey = new("SELECT addressId FROM address ORDER BY addressId Desc",connection);
             MySqlCommand getCountryForeignKey = new("SELECT countryId FROM country ORDER BY countryId Desc", connection);
+            MySqlCommand getCustomerId = new("SELECT customerId FROM customer ORDER BY customerId Desc", connection);
 
             String updateCustomerName = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@Name, @addressId, 0, 02/13/2023, 0, 0, 0)";
             String updateCustomerAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@address, 0, @cityId, @zipCode, @phone, 0, 0, 0, 0)";
@@ -100,10 +102,14 @@ namespace Application_Client
                         nameCommand.Parameters.Add("@Name", MySqlDbType.VarChar).Value = name;
                         nameCommand.Parameters.Add("addressId", MySqlDbType.Int32).Value = addressPrimaryKey;
                         nameCommand.ExecuteNonQuery();
+
+                        customerId = (int)getCustomerId.ExecuteScalar();
                     }
 
                     connection.Close();
 
+                    Customer newCustomer = new(customerId, name, address, city, zip, country, phone);
+                    customerList.addCustomer(newCustomer);
                     MainWindow main = new();
                 }
                 catch (Exception ex)

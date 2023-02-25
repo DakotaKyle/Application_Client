@@ -11,7 +11,7 @@ namespace Application_Client
     {
         public static BindingList<Customer> Customers = new();
 
-        public static void addCustomer(Customer customer)
+        public void addCustomer(Customer customer)
         {
             Customers.Add(customer);
         }

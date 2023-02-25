@@ -151,6 +151,7 @@ namespace Application_Client
                 {
                     try
                     {
+
                         connection.Open();
 
                         using (MySqlCommand customerCommand = new(deleteCustomerName, connection))

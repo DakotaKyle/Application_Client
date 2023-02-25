@@ -32,7 +32,8 @@ namespace Application_Client
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
 
-            int addressPrimaryKey, countryPrimaryKey;
+            int customerId, addressId, countryId, addressPrimaryKey, countryPrimaryKey;
+            String name, address, city, zip, country, phone;
 
             MySqlCommand getAddressForeignKey = new("SELECT addressId FROM address ORDER BY addressId Desc",connection);
             MySqlCommand getCountryForeignKey = new("SELECT countryId FROM country ORDER BY countryId Desc", connection);
@@ -41,6 +42,8 @@ namespace Application_Client
             String updateCustomerAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@address, 0, @cityId, @zipCode, @phone, 0, 0, 0, 0)";
             String updateCustomerCity = "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@city, @countryId, 07/17/2023, 0, 0, 0)";
             String updateCustomerCountry = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@country, 07/17/2023, 0, 0, 0)";
+
+
 
             using (MySqlConnection con = new(connectionString)) {
 

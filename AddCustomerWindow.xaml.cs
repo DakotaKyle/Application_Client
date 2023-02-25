@@ -43,7 +43,22 @@ namespace Application_Client
             String updateCustomerCity = "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@city, @countryId, 07/17/2023, 0, 0, 0)";
             String updateCustomerCountry = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@country, 07/17/2023, 0, 0, 0)";
 
-
+            if (NameTextBox.Text.Length >= 1 && AddressTextBox.Text.Length >= 1 &&
+                CityTextBox.Text.Length >= 1 && ZipcodeTextBox.Text.Length >= 1 &&
+                CountryTextBox.Text.Length >= 1 && PhoneTextBox.Text.Length >= 1)
+            {
+                name = NameTextBox.Text;
+                address = AddressTextBox.Text;
+                city = CityTextBox.Text;
+                zip = ZipcodeTextBox.Text;
+                country = CountryTextBox.Text;
+                phone = PhoneTextBox.Text;
+            }
+            else
+            {
+                MessageBox.Show("All fields are required to continue.");
+                return;
+            }
 
             using (MySqlConnection con = new(connectionString)) {
 
@@ -54,7 +69,7 @@ namespace Application_Client
 
                     using (MySqlCommand countryCommand = new(updateCustomerCountry, connection))
                     {
-                        countryCommand.Parameters.Add("@country", MySqlDbType.VarChar).Value = CountryTextBox.Text;
+                        countryCommand.Parameters.Add("@country", MySqlDbType.VarChar).Value = country;
                         countryCommand.ExecuteNonQuery();
 
                         countryPrimaryKey = (int)getCountryForeignKey.ExecuteScalar();
@@ -62,7 +77,7 @@ namespace Application_Client
 
                     using (MySqlCommand cityCommand = new(updateCustomerCity, connection))
                     {
-                        cityCommand.Parameters.Add("@city", MySqlDbType.VarChar).Value = CityTextBox.Text;
+                        cityCommand.Parameters.Add("@city", MySqlDbType.VarChar).Value = city;
                         cityCommand.Parameters.Add("@countryId", MySqlDbType.Int32).Value = countryPrimaryKey;
                         cityCommand.ExecuteNonQuery();
                     }
@@ -70,9 +85,9 @@ namespace Application_Client
                     using (MySqlCommand addressCommand = new(updateCustomerAddress, connection))
                     {
 
-                        addressCommand.Parameters.Add("@address", MySqlDbType.VarChar).Value = AddressTextBox.Text;
-                        addressCommand.Parameters.Add("@zipCode", MySqlDbType.VarChar).Value = ZipcodeTextBox.Text;
-                        addressCommand.Parameters.Add("@phone", MySqlDbType.VarChar).Value = PhoneTextBox.Text;
+                        addressCommand.Parameters.Add("@address", MySqlDbType.VarChar).Value = address;
+                        addressCommand.Parameters.Add("@zipCode", MySqlDbType.VarChar).Value = zip;
+                        addressCommand.Parameters.Add("@phone", MySqlDbType.VarChar).Value = phone;
                         addressCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = countryPrimaryKey;
                         addressCommand.ExecuteNonQuery();
 
@@ -82,7 +97,7 @@ namespace Application_Client
                     using (MySqlCommand nameCommand = new(updateCustomerName, connection))
                     {
 
-                        nameCommand.Parameters.Add("@Name", MySqlDbType.VarChar).Value = NameTextBox.Text;
+                        nameCommand.Parameters.Add("@Name", MySqlDbType.VarChar).Value = name;
                         nameCommand.Parameters.Add("addressId", MySqlDbType.Int32).Value = addressPrimaryKey;
                         nameCommand.ExecuteNonQuery();
                     }

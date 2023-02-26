@@ -25,7 +25,7 @@ namespace Application_Client
         private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
         private MySqlConnection connection = new(connectionString);
         private CustomerList customer = new();
-        private static LoginPage login = new();
+        private static readonly LoginPage login = new();
 
         public MainWindow()
         {
@@ -110,7 +110,7 @@ namespace Application_Client
 
             if (CustomerRecordDataGrid.SelectedItem != null)
             {
-                MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.","",MessageBoxButton.YesNo);
+                MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.", "", MessageBoxButton.YesNo);
 
                 if (messageBox == MessageBoxResult.Yes)
                 {
@@ -159,6 +159,10 @@ namespace Application_Client
                 {
                     return;
                 }
+            }
+            else
+            {
+                MessageBox.Show("Select a customer to delete.");
             }
         }
 

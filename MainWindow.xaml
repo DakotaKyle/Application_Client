@@ -61,10 +61,13 @@
 
 				<DataGrid.Columns>
 
-					<DataGridTextColumn Header="CustomerID" FontFamily="Times New Roman" Width="45*" Binding="{Binding Path=customerId}"/>
-					<DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="65*" Binding="{Binding Path=customerName}"/>
-					<DataGridTextColumn Header="Address" FontFamily="Times New Roman" Width="110*" Binding="{Binding Path=address}"/>
-					<DataGridTextColumn Header="Phone" FontFamily="Times New Roman" Width="50*" Binding="{Binding Path=phone}"/>
+					<DataGridTextColumn Header="ID" FontFamily="Times New Roman" Width="15*" Binding="{Binding Path=CustomerId}"/>
+					<DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=Name}"/>
+					<DataGridTextColumn Header="Street" FontFamily="Times New Roman" Width="70*" Binding="{Binding Path=Address}"/>
+                    <DataGridTextColumn Header="City" FontFamily="Times New Roman" Width="50*" Binding="{Binding Path=City}"/>
+                    <DataGridTextColumn Header="Country" FontFamily="Times New Roman" Width="40*" Binding="{Binding Path=Country}"/>
+                    <DataGridTextColumn Header="Zip" FontFamily="Times New Roman" Width="30*" Binding="{Binding Path=Zip}"/>
+					<DataGridTextColumn Header="Phone" FontFamily="Times New Roman" Width="50*" Binding="{Binding Path=Phone}"/>
 
 				</DataGrid.Columns>
 

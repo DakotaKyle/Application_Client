@@ -32,8 +32,6 @@ namespace Application_Client
 
                 foreach (DataRow row in customerTable.Rows)
                 {
-                    
-
                     name = customerTable.Rows[i]["customerName"].ToString();
                     customerId = (int)customerTable.Rows[i]["customerId"];
                     address = customerTable.Rows[i]["address"].ToString();
@@ -62,6 +60,11 @@ namespace Application_Client
         public void addCustomer(Customer customer)
         {
             Customers.Add(customer);
+        }
+
+        public void removeCustomer(Customer customer)
+        {
+            Customers.Remove(customer);
         }
     }
 }

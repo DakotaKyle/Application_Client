@@ -114,7 +114,6 @@ namespace Application_Client
                         city, cityId, zip, country, countryPrimaryKey, phone);
 
                     customerList.addCustomer(newCustomer);
-                    MainWindow main = new();
                     Close();
                 }
                 catch (Exception ex)

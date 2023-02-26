@@ -24,12 +24,13 @@ namespace Application_Client
     {
         private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
         private MySqlConnection connection = new(connectionString);
-        readonly LoginPage login = new();
-        CustomerList customer = new();
+        private CustomerList customer = new();
+        private static LoginPage login = new();
 
         public MainWindow()
         {
             InitializeComponent();
+            CustomerRecordDataGrid.ItemsSource = CustomerList.Customers;
 
             try
             {
@@ -38,47 +39,19 @@ namespace Application_Client
                     Hide();
                     login.ShowDialog();
                     customer.initCustomer();
+                    getScheduleData();
+
+                    if (LoginPage.isvalid == true)
+                    {
+                        Show();
+                    }
                 }
             }
             catch (InvalidOperationException)
             {
                 Close();
             }
-            if (LoginPage.isvalid == true)
-            {
-                Show();
-                getCustomerData();
-                getScheduleData();
-            }
-        }
-        public void getCustomerData()
-        {
-
-            MySqlCommand customerData = new("SELECT customer.customerId, customer.customerName, address.phone, CONCAT(address.address, ', ', city.city, ', ', country.country, ' ', address.postalCode) AS address FROM customer JOIN address ON customer.addressId = address.addressId JOIN city ON address.cityId = city.cityId JOIN country ON city.countryId = country.countryId", connection);
-
-            try
-            {
-                connection.Open();
-
-                DataTable customerTable = new();
-                customerTable.Load(customerData.ExecuteReader());
-
-                connection.Close();
-
-                CustomerRecordDataGrid.DataContext = customerTable;
-
-            }
-            catch (MySqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (connection != null)
-                {
-                    connection.Close();
-                }
-            }
+            
         }
 
         public void getScheduleData()
@@ -116,7 +89,7 @@ namespace Application_Client
             Hide();
             AddCustomerWindow addCustomer = new();
             addCustomer.ShowDialog();
-
+            Show();
         }
 
         private void ModifyCustomerButton_Click(object sender, RoutedEventArgs e)
@@ -129,18 +102,10 @@ namespace Application_Client
 
         private void DeleteCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-
-            int customerPrimaryKey, addressPrimaryKey, countryPrimaryKey;
-
-            //MySqlCommand getCustomerPrimaryKey = new("SELECT customerId FROM Customer WHERE customerId=@customerId", connection);
-            //MySqlCommand getAddressPrimaryKey = new("SELECT addressId FROM address ORDER BY addressId Desc", connection);
-            //MySqlCommand getCountryPrimaryKey = new("SELECT countryId FROM country ORDER BY countryId Desc", connection);
-            
-
             String deleteCustomerName = "DELETE FROM customer WHERE customerId=@customerId";
-            //String deleteCustomerAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@address, 0, @cityId, @zipCode, @phone, 0, 0, 0, 0)";
-            //String deleteCustomerCity = "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@city, @countryId, 07/17/2023, 0, 0, 0)";
-            //String deleteCustomerCountry = "INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@country, 07/17/2023, 0, 0, 0)";
+            String deleteCustomerAddress = "DELETE FROM address WHERE addressId=@addressId";
+            String deleteCustomerCity = "DELETE FROM city WHERE cityId=@cityId";
+            String deleteCustomerCountry = "DELETE FROM country WHERE countryId=@countryId";
 
 
             if (CustomerRecordDataGrid.SelectedItem != null)
@@ -151,18 +116,39 @@ namespace Application_Client
                 {
                     try
                     {
+                        Customer oldCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
+                        int customerId = oldCustomer.CustomerId;
+                        int addressId = oldCustomer.AddressId;
+                        int cityId = oldCustomer.CityId;
+                        int countryId = oldCustomer.CountryId;
 
                         connection.Open();
 
                         using (MySqlCommand customerCommand = new(deleteCustomerName, connection))
                         {
-                            //customerCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value =
-                            //customerCommand.ExecuteNonQuery();
+                            customerCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
+                            customerCommand.ExecuteNonQuery();
+                        }
+
+                        using (MySqlCommand addressCommand = new(deleteCustomerAddress, connection))
+                        {
+                            addressCommand.Parameters.Add("@addressId", MySqlDbType.Int32).Value = addressId;
+                            addressCommand.ExecuteNonQuery();
+                        }
+                        using (MySqlCommand cityCommand = new(deleteCustomerCity, connection))
+                        {
+                            cityCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = cityId;
+                            cityCommand.ExecuteNonQuery();
+                        }
+                        using (MySqlCommand countryCommand = new(deleteCustomerCountry, connection))
+                        {
+                            countryCommand.Parameters.Add("@countryId", MySqlDbType.Int32).Value = countryId;
+                            countryCommand.ExecuteNonQuery();
                         }
 
                         connection.Close();
 
-                        Close();
+                        customer.removeCustomer(oldCustomer);
                     }
                     catch (Exception ex)
                     {

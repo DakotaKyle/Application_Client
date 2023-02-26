@@ -3,7 +3,7 @@
 public class Customer
 {
 	public int CustomerId { get; set; }
-	public string Name { get; set; }
+    public string Name { get; set; }
 	public string Address { get; set; }
 	public int AddressId { get; set; }
 	public string City { get; set; }
@@ -18,7 +18,7 @@ public class Customer
 	{
 		Name = name;
 		CustomerId = customerId;
-		Address = address;
+        Address = address;
 		AddressId = addressId;
 		City = city;
 		CityId = cityId;

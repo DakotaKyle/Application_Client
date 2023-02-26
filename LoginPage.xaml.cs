@@ -69,7 +69,7 @@ namespace Application_Client
             {
                 if (connection != null)
                 {
-                    connection.Close();
+                    connection.Dispose();
                 }
             }
 

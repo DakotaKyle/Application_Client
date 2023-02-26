@@ -27,4 +27,6 @@ public class Customer
 		CountryId = countryId;
 		Phone = phone;
 	}
+
+	public Customer(){}
 }

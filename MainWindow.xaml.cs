@@ -25,7 +25,7 @@ namespace Application_Client
         private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
         private MySqlConnection connection = new(connectionString);
         readonly LoginPage login = new();
-        Customer customer = new();
+        CustomerList customer = new();
 
         public MainWindow()
         {
@@ -37,7 +37,7 @@ namespace Application_Client
                 {
                     Hide();
                     login.ShowDialog();
-
+                    customer.initCustomer();
                 }
             }
             catch (InvalidOperationException)

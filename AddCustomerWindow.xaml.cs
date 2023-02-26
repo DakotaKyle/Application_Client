@@ -33,12 +33,13 @@ namespace Application_Client
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
 
-            int customerId, addressPrimaryKey, countryPrimaryKey;
+            int customerId, cityId, addressPrimaryKey, countryPrimaryKey;
             String name, address, city, zip, country, phone;
 
             MySqlCommand getAddressForeignKey = new("SELECT addressId FROM address ORDER BY addressId Desc",connection);
             MySqlCommand getCountryForeignKey = new("SELECT countryId FROM country ORDER BY countryId Desc", connection);
             MySqlCommand getCustomerId = new("SELECT customerId FROM customer ORDER BY customerId Desc", connection);
+            MySqlCommand getCityId = new("SELECT cityId FROM city ORDER BY cityId Desc", connection);
 
             String updateCustomerName = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@Name, @addressId, 0, 02/13/2023, 0, 0, 0)";
             String updateCustomerAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@address, 0, @cityId, @zipCode, @phone, 0, 0, 0, 0)";
@@ -94,6 +95,7 @@ namespace Application_Client
                         addressCommand.ExecuteNonQuery();
 
                         addressPrimaryKey = (int)getAddressForeignKey.ExecuteScalar();
+                        cityId = (int)getCityId.ExecuteScalar();
                     }
 
                     using (MySqlCommand nameCommand = new(updateCustomerName, connection))
@@ -108,9 +110,12 @@ namespace Application_Client
 
                     connection.Close();
 
-                    Customer newCustomer = new(customerId, name, address, city, zip, country, phone);
+                    Customer newCustomer = new(name, customerId, address, addressPrimaryKey,
+                        city, cityId, zip, country, countryPrimaryKey, phone);
+
                     customerList.addCustomer(newCustomer);
                     MainWindow main = new();
+                    Close();
                 }
                 catch (Exception ex)
                 {

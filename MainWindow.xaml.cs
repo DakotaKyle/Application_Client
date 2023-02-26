@@ -25,33 +25,33 @@ namespace Application_Client
         private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
         private MySqlConnection connection = new(connectionString);
         readonly LoginPage login = new();
+        Customer customer = new();
 
         public MainWindow()
         {
             InitializeComponent();
-            Hide();
 
             try
             {
                 while (LoginPage.isvalid == false)
                 {
+                    Hide();
                     login.ShowDialog();
+
                 }
             }
             catch (InvalidOperationException)
             {
                 Close();
             }
-
             if (LoginPage.isvalid == true)
             {
+                Show();
                 getCustomerData();
                 getScheduleData();
-                Show();
             }
         }
-
-        private void getCustomerData()
+        public void getCustomerData()
         {
 
             MySqlCommand customerData = new("SELECT customer.customerId, customer.customerName, address.phone, CONCAT(address.address, ', ', city.city, ', ', country.country, ' ', address.postalCode) AS address FROM customer JOIN address ON customer.addressId = address.addressId JOIN city ON address.cityId = city.cityId JOIN country ON city.countryId = country.countryId", connection);
@@ -113,7 +113,7 @@ namespace Application_Client
 
         private void AddCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Hide();
             AddCustomerWindow addCustomer = new();
             addCustomer.ShowDialog();
 
@@ -156,8 +156,8 @@ namespace Application_Client
 
                         using (MySqlCommand customerCommand = new(deleteCustomerName, connection))
                         {
-                           // customerCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = CustomerRecordDataGrid.Items.IndexOf(0);
-                           // customerCommand.ExecuteNonQuery();
+                            //customerCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value =
+                            //customerCommand.ExecuteNonQuery();
                         }
 
                         connection.Close();

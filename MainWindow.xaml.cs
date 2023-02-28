@@ -86,18 +86,22 @@ namespace Application_Client
 
         private void AddCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-            Hide();
             AddCustomerWindow addCustomer = new();
             addCustomer.ShowDialog();
-            Show();
         }
 
         private void ModifyCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-
-            ModifyCustomerWindow modifyCustomer = new();
-            modifyCustomer.ShowDialog();
-
+            if (CustomerRecordDataGrid.SelectedItem != null)
+            {
+                Customer thisCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
+                ModifyCustomerWindow modifyCustomer = new(thisCustomer);
+                modifyCustomer.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Select a customer to modify.");
+            }
         }
 
         private void DeleteCustomerButton_Click(object sender, RoutedEventArgs e)

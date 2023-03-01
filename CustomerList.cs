@@ -56,6 +56,13 @@ namespace Application_Client
             {
                 MessageBox.Show("Error: " + ex);
             }
+            finally
+            {
+                if (connection != null)
+                {
+                    connection.Dispose();
+                }
+            }
         }
 
         public void addCustomer(Customer customer)

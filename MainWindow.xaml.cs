@@ -25,12 +25,14 @@ namespace Application_Client
         private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
         private MySqlConnection connection = new(connectionString);
         private CustomerList customer = new();
+        private AppointmentList appointment = new();
         private static readonly LoginPage login = new();
 
         public MainWindow()
         {
             InitializeComponent();
             CustomerRecordDataGrid.ItemsSource = CustomerList.Customers;
+            AppointmentDataGrid.ItemsSource = AppointmentList.Appointments;
 
             try
             {
@@ -38,11 +40,11 @@ namespace Application_Client
                 {
                     Hide();
                     login.ShowDialog();
-                    customer.initCustomer();
-                    getScheduleData();
 
                     if (LoginPage.isvalid == true)
                     {
+                        customer.initCustomer();
+                        appointment.initAppointment();
                         Show();
                     }
                 }
@@ -52,36 +54,6 @@ namespace Application_Client
                 Close();
             }
             
-        }
-
-        public void getScheduleData()
-        {
-
-            MySqlCommand appointmentData = new("SELECT customer.customerName, appointment.type, appointment.start, appointment.end FROM customer JOIN appointment ON customer.customerId = appointment.customerId", connection);
-
-            try
-            {
-                connection.Open();
-
-                DataTable appointmentTable = new();
-                appointmentTable.Load(appointmentData.ExecuteReader());
-
-                connection.Close();
-
-                AppointmentDataGrid.DataContext = appointmentTable;
-
-            }
-            catch (MySqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (connection != null)
-                {
-                    connection.Close();
-                }
-            }
         }
 
         private void AddCustomerButton_Click(object sender, RoutedEventArgs e)

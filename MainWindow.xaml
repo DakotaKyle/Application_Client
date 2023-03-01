@@ -169,10 +169,10 @@
 
               <DataGrid.Columns>
 
-                <DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="60*" Binding="{Binding Path=customerName}"/>
-                <DataGridTextColumn Header="Appointment Type" FontFamily="Times New Roman" Width="65*" Binding="{Binding Path=type}"/>
-                <DataGridTextColumn Header="Start" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=start}"/>
-                <DataGridTextColumn Header="End" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=end}"/>
+                <DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="60*" Binding="{Binding Path=CustomerName}"/>
+                <DataGridTextColumn Header="Appointment Type" FontFamily="Times New Roman" Width="65*" Binding="{Binding Path=AppointmentType}"/>
+                <DataGridTextColumn Header="Start" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=Start}"/>
+                <DataGridTextColumn Header="End" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=End}"/>
                 
               </DataGrid.Columns>
 

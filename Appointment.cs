@@ -13,10 +13,10 @@ namespace Application_Client
         public int UserId { get; set; }
         public String CustomerName { get; set; }
         public String AppointmentType { get; set; }
-        public String Start { get; set; }
-        public String End { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
 
-        public Appointment(int appointmentId, int customerId, int userId, String customerName, String appointmentType, String startTime, String endTime)
+        public Appointment(int appointmentId, int customerId, int userId, String customerName, String appointmentType, DateTime startTime, DateTime endTime)
         {
             AppointmentId = appointmentId;
             CustomerId = customerId;

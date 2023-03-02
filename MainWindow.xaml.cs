@@ -144,10 +144,16 @@ namespace Application_Client
 
         private void AddAppointmentButton_Click(object sender, RoutedEventArgs e)
         {
-
-            AddAppointmentWindow addAppointment = new();
-            addAppointment.ShowDialog();
-
+            if (CustomerRecordDataGrid.SelectedItem != null)
+            {
+                Customer thisCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
+                AddAppointmentWindow addAppointment = new(thisCustomer);
+                addAppointment.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Select a customer to schedule an appointment.");
+            }
         }
 
         private void ModifyAppointmentButton_Click(object sender, RoutedEventArgs e)

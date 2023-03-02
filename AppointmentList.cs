@@ -21,7 +21,8 @@ namespace Application_Client
         {
             int appId, customerId, userId;
             int i = 0;
-            String customerName, appType, start, end;
+            String customerName, appType;
+            DateTime start, end;
             MySqlCommand appointmentData = new("SELECT appointment.appointmentId, appointment.customerId, appointment.userId, customer.customerName, appointment.type, appointment.start, appointment.end FROM customer JOIN appointment ON customer.customerId = appointment.customerId", connection);
 
             try
@@ -38,8 +39,8 @@ namespace Application_Client
                     userId = (int)appointmentTable.Rows[i]["userId"];
                     customerName = appointmentTable.Rows[i]["customerName"].ToString();
                     appType = appointmentTable.Rows[i]["type"].ToString();
-                    start = appointmentTable.Rows[i]["start"].ToString();
-                    end = appointmentTable.Rows[i]["end"].ToString();
+                    start = (DateTime)appointmentTable.Rows[i]["start"];
+                    end = (DateTime)appointmentTable.Rows[i]["end"];
 
                     Appointment initAppointments = new(appId, customerId, userId, customerName, appType, start, end);
                     addAppointment(initAppointments);

@@ -41,9 +41,9 @@
 
             </Label>
 
-            <Label x:Name="StartLabel"
+            <Label x:Name="StartDateLabel"
 
-                Content="Start"
+                Content="Start Date"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Times New Roman"
@@ -52,55 +52,42 @@
 
             </Label>
 
-            <ComboBox x:Name="StartComboBox"
+            <DatePicker x:Name="StartDatePicker"
                 
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Times New Roman"
                 FontSize="24"
-                Width="100"
-                Margin="0,0,50,0">
+                Width="160"
+                Margin="0,0,0,0"
+                SelectedDateFormat="Short"
+                SelectedDateChanged="StartDatePicker_SelectedDateChanged">
 
-                <ComboBoxItem Content="1:00"/>
-                <ComboBoxItem Content="1:30"/>
-                <ComboBoxItem Content="2:00"/>
-                <ComboBoxItem Content="2:30"/>
-                <ComboBoxItem Content="3:00"/>
-                <ComboBoxItem Content="3:30"/>
-                <ComboBoxItem Content="4:00"/>
-                <ComboBoxItem Content="4:30"/>
-                <ComboBoxItem Content="5:00"/>
-                <ComboBoxItem Content="5:30"/>
-                <ComboBoxItem Content="6:00"/>
-                <ComboBoxItem Content="6:30"/>
-                <ComboBoxItem Content="7:00"/>
-                <ComboBoxItem Content="7:30"/>
-                <ComboBoxItem Content="8:00"/>
-                <ComboBoxItem Content="8:30"/>
-                <ComboBoxItem Content="9:00"/>
-                <ComboBoxItem Content="9:30"/>
-                <ComboBoxItem Content="10:00"/>
-                <ComboBoxItem Content="10:30"/>
-                <ComboBoxItem Content="11:00"/>
-                <ComboBoxItem Content="11:30"/>
-                <ComboBoxItem Content="12:00"/>
-                <ComboBoxItem Content="12:30"/>
+            </DatePicker>
 
-            </ComboBox>
+            <Label x:Name="StartTimeLabel"
+                
+                Content="Start Time"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Margin="0,10,0,0">
 
-            <ComboBox x:Name="StartTimeComboBox"
+            </Label>
+
+            <TextBox x:Name="StartTimeTextBox"
                 
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Times New Roman"
-                FontSize="19"
-                Width="60"
-                Margin="0,-35,-125,0">
+                FontSize="22"
+                Width="150"
+                Height="31"
+                Margin="0,0,0,0">
 
-                <ComboBoxItem Content="AM"/>
-                <ComboBoxItem Content="PM"/>
+            </TextBox>
 
-            </ComboBox>
 
             <Button x:Name="AddAppointmentButton"
 
@@ -122,7 +109,8 @@
         <StackPanel Grid.Column="1">
 
             <TextBox x:Name="NameTextBox"
-                     
+                
+                IsReadOnly="True"
                 Text=""
                 TextWrapping="Wrap"
                 HorizontalAlignment="Center"
@@ -153,9 +141,9 @@
 
             </ComboBox>
 
-            <Label x:Name="EndLabel"
+            <Label x:Name="EndDateLabel"
 
-                Content="End"
+                Content="End Date"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Times New Roman"
@@ -164,55 +152,41 @@
 
             </Label>
 
-            <ComboBox x:Name="EndComboBox"
+            <DatePicker x:Name="EndDatePicker"
                 
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Times New Roman"
                 FontSize="24"
-                Width="100"
-                Margin="0,0,50,0">
+                Width="160"
+                Margin="0,0,0,0"
+                SelectedDateFormat="Short"
+                SelectedDateChanged="EndDatePicker_SelectedDateChanged">
 
-                <ComboBoxItem Content="1:00"/>
-                <ComboBoxItem Content="1:30"/>
-                <ComboBoxItem Content="2:00"/>
-                <ComboBoxItem Content="2:30"/>
-                <ComboBoxItem Content="3:00"/>
-                <ComboBoxItem Content="3:30"/>
-                <ComboBoxItem Content="4:00"/>
-                <ComboBoxItem Content="4:30"/>
-                <ComboBoxItem Content="5:00"/>
-                <ComboBoxItem Content="5:30"/>
-                <ComboBoxItem Content="6:00"/>
-                <ComboBoxItem Content="6:30"/>
-                <ComboBoxItem Content="7:00"/>
-                <ComboBoxItem Content="7:30"/>
-                <ComboBoxItem Content="8:00"/>
-                <ComboBoxItem Content="8:30"/>
-                <ComboBoxItem Content="9:00"/>
-                <ComboBoxItem Content="9:30"/>
-                <ComboBoxItem Content="10:00"/>
-                <ComboBoxItem Content="10:30"/>
-                <ComboBoxItem Content="11:00"/>
-                <ComboBoxItem Content="11:30"/>
-                <ComboBoxItem Content="12:00"/>
-                <ComboBoxItem Content="12:30"/>
+            </DatePicker>
 
-            </ComboBox>
+            <Label x:Name="EndTimeLabel"
+                
+                Content="End Time"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Margin="0,10,0,0">
 
-            <ComboBox x:Name="EndTimeComboBox"
+            </Label>
+
+            <TextBox x:Name="EndTimeTextBox"
                 
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Times New Roman"
-                FontSize="19"
-                Width="60"
-                Margin="0,-35,-125,0">
+                FontSize="22"
+                Width="150"
+                Height="31"
+                Margin="0,0,0,0">
 
-                <ComboBoxItem Content="AM"/>
-                <ComboBoxItem Content="PM"/>
-
-            </ComboBox>
+            </TextBox>
 
             <Button x:Name="CancelButton"
 

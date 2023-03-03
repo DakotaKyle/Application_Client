@@ -129,6 +129,7 @@ namespace Application_Client
                     catch (Exception ex)
                     {
                         MessageBox.Show("Error: " + ex.Message);
+                        connection.Dispose();
                     }
                 }
                 else if (messageBox == MessageBoxResult.No)

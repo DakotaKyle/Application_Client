@@ -24,31 +24,32 @@ namespace Application_Client
         private MySqlConnection connection = new(connectionString);
         private AppointmentList appointmentList = new();
         private int customerId;
+        private String customerName;
 
         public AddAppointmentWindow(Customer customer)
         {
             InitializeComponent();
             NameTextBox.Text = customer.Name;
+            customerName = NameTextBox.Text;
             customerId = customer.CustomerId;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             int appointmentId, userId;
-            String appType;
-            String startString, endString;
+            String appType, startString, endString;
             DateTime start, end;
 
             MySqlCommand getAppointmentId = new("SELECT appointmentId FROM appointment ORDER BY appointmentId Desc", connection);
-            MySqlCommand getUserId = new("SELECT userId FROM appointment ORDER BY userId Desc", connection);
+            MySqlCommand getUserId = new("SELECT userId FROM user ORDER BY userId Desc", connection);
 
-            string addApointment = "INSERT INTO appointment (title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (0, 0, 0, 0, @type, 0, @start, @end, 03/01/2023, 0, 0, 0)";
+            string addApointment = "INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@customerId, @userId, 0, 0, 0, 0, @type, 0, @start, @end, 03/01/2023, 0, 0, 0)";
 
             if (AppointmentComboBox.SelectedItem != null && StartDatePicker.SelectedDate != null &&
                 StartTimeTextBox.Text.Length >= 1 && EndDatePicker.SelectedDate != null &&
                 EndTimeTextBox.Text.Length >= 1)
             {
-                appType = AppointmentComboBox.SelectedItem.ToString();
+                appType = AppointmentComboBox.Text;
                 startString = StartDatePicker.Text + " " + StartTimeTextBox.Text;
                 endString = EndDatePicker.Text + " " + EndTimeTextBox.Text;
 
@@ -57,6 +58,39 @@ namespace Application_Client
                 {
                     start = startDateTime;
                     end = endDateTime;
+
+                    using (MySqlConnection con = new(connectionString))
+                    {
+                        try
+                        {
+                            connection.Open();
+
+                            using (MySqlCommand addCommand = new(addApointment, connection))
+                            {
+                                userId = (int)getUserId.ExecuteScalar();
+
+                                addCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
+                                addCommand.Parameters.Add("@userId", MySqlDbType.Int32).Value = userId;
+                                addCommand.Parameters.Add("@type", MySqlDbType.VarChar).Value = appType;
+                                addCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start;
+                                addCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end;
+                                addCommand.ExecuteNonQuery();
+
+                                appointmentId = (int)getAppointmentId.ExecuteScalar();
+                            }
+
+                            connection.Close();
+
+                            Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start, end);
+                            appointmentList.addAppointment(newAppointment);
+                            Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex);
+                            connection.Dispose();
+                        }
+                    }
                 }
                 else
                 {
@@ -66,7 +100,7 @@ namespace Application_Client
             else
             {
                 MessageBox.Show("All fields are required.");
-            } 
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

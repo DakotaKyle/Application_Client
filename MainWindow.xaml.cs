@@ -167,7 +167,46 @@ namespace Application_Client
 
         private void DeleteAppointmentButton_Click(object sender, RoutedEventArgs e)
         {
+            String deleteAppointment = "DELETE FROM appointment WHERE appointmentId=@appointmentId";
 
+            if (AppointmentDataGrid.SelectedItem != null)
+            {
+                MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.", "", MessageBoxButton.YesNo);
+
+                if (messageBox == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        Appointment oldAppointment = (Appointment)AppointmentDataGrid.SelectedItem;
+                        int appointmentId = oldAppointment.AppointmentId;
+
+                        connection.Open();
+
+                        using (MySqlCommand appointmentCommand = new(deleteAppointment, connection))
+                        {
+                            appointmentCommand.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
+                            appointmentCommand.ExecuteNonQuery();
+                        }
+
+                        connection.Close();
+
+                        appointment.removeAppointment(oldAppointment);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex);
+                        connection.Dispose();
+                    }
+                }
+                else if (messageBox == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select an appointment to delete.");
+            }
         }
 
         private void WeekViewButton_Click(object sender, RoutedEventArgs e)

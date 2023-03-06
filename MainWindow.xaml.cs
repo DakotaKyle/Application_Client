@@ -159,10 +159,23 @@ namespace Application_Client
 
         private void ModifyAppointmentButton_Click(object sender, RoutedEventArgs e)
         {
-
-            ModifyAppointmentWindow modifyAppointment = new();
-            modifyAppointment.ShowDialog();
-
+            if (AppointmentDataGrid.SelectedItem != null)
+            {
+                try
+                {
+                    Appointment thisAppointment = (Appointment)AppointmentDataGrid.SelectedItem;
+                    ModifyAppointmentWindow modifyAppointment = new(thisAppointment);
+                    modifyAppointment.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select an appointment to modify.");
+            }
         }
 
         private void DeleteAppointmentButton_Click(object sender, RoutedEventArgs e)

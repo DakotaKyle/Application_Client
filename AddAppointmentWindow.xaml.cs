@@ -94,7 +94,7 @@ namespace Application_Client
                 }
                 else
                 {
-                    MessageBox.Show("Enter a valid time to continue");
+                    MessageBox.Show("Enter a valid date or time to continue.");
                 }
             }
             else

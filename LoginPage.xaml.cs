@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace Application_Client
 {
@@ -60,7 +61,15 @@ namespace Application_Client
 
                 if (!isvalid)
                 {
-                    MessageBox.Show("Invalid username or password.");
+                    CultureInfo culture = CultureInfo.CurrentUICulture;
+                    if (culture.Name == "US-EN")
+                    {
+                        MessageBox.Show(String.Format(culture, Properties.Resources.InvalidLoginEng));
+                    }
+                    else if (culture.Name == "fr-FR")
+                    {
+                        MessageBox.Show(String.Format(culture, Properties.Resources.InvalidLoginFr));
+                    }
                 }       
             }
             catch (Exception ex)

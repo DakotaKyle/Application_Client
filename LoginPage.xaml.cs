@@ -33,46 +33,41 @@ namespace Application_Client
 
         private void authenticate()
         {
-            String user, pass;
-            MySqlCommand userData = new("SELECT userName, password FROM user",connection);
+            int i = 0;
+            DataTable userTable = new();
+            String userName, Password;
+            MySqlCommand userData = new("SELECT userName, password FROM user", connection);
 
             try
             {
                 connection.Open();
 
-                using (var reader = userData.ExecuteReader())
-                {
-                    reader.Read();
-                    user = reader.GetString(0);
-                    pass = reader.GetString(1);
-                }
+                userTable.Load(userData.ExecuteReader());
 
                 connection.Close();
 
-                if (username == user && password == pass)
+                foreach (DataRow row in userTable.Rows)
                 {
-                    isvalid = true;
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show("Username and password not found. Please try again or create an account.");
-                    return;
+                    userName = userTable.Rows[i]["userName"].ToString();
+                    Password = userTable.Rows[i]["password"].ToString();
+
+                    if (username == userName && password == Password)
+                    {
+                        isvalid = true;
+                        return;
+                    }
                 }
 
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            finally
-            {
-                if (connection != null)
+                if (!isvalid)
                 {
-                    connection.Close();
-                }
+                    MessageBox.Show("Invalid username or password.");
+                }       
             }
-
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex);
+                connection.Dispose();
+            }
         }
 
         private void Loginbuton_Click(object sender, RoutedEventArgs e)
@@ -81,6 +76,9 @@ namespace Application_Client
             password = PasswordBox.Password.ToString();
             
             authenticate();
+
+            if (isvalid)
+                Close();
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)

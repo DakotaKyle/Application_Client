@@ -59,37 +59,53 @@ namespace Application_Client
                     start = startDateTime;
                     end = endDateTime;
 
-                    using (MySqlConnection con = new(connectionString))
+                    if ((start.Hour >= 8 && start.Hour <= 17) && (end.Hour >= 8 && end.Hour <= 17))
                     {
-                        try
-                        {
-                            connection.Open();
+                        appointmentList.validateTimes(start, end);
 
-                            using (MySqlCommand addCommand = new(addApointment, connection))
+                        if (appointmentList.isTimeValid)
+                        {
+                            using (MySqlConnection con = new(connectionString))
                             {
-                                userId = (int)getUserId.ExecuteScalar();
+                                try
+                                {
+                                    connection.Open();
 
-                                addCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
-                                addCommand.Parameters.Add("@userId", MySqlDbType.Int32).Value = userId;
-                                addCommand.Parameters.Add("@type", MySqlDbType.VarChar).Value = appType;
-                                addCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start;
-                                addCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end;
-                                addCommand.ExecuteNonQuery();
+                                    using (MySqlCommand addCommand = new(addApointment, connection))
+                                    {
+                                        userId = (int)getUserId.ExecuteScalar();
 
-                                appointmentId = (int)getAppointmentId.ExecuteScalar();
+                                        addCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
+                                        addCommand.Parameters.Add("@userId", MySqlDbType.Int32).Value = userId;
+                                        addCommand.Parameters.Add("@type", MySqlDbType.VarChar).Value = appType;
+                                        addCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start;
+                                        addCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end;
+                                        addCommand.ExecuteNonQuery();
+
+                                        appointmentId = (int)getAppointmentId.ExecuteScalar();
+                                    }
+
+                                    connection.Close();
+
+                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start, end);
+                                    appointmentList.addAppointment(newAppointment);
+                                    Close();
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Error: " + ex);
+                                    connection.Dispose();
+                                }
                             }
-
-                            connection.Close();
-
-                            Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start, end);
-                            appointmentList.addAppointment(newAppointment);
-                            Close();
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            MessageBox.Show("Error: " + ex);
-                            connection.Dispose();
+                            MessageBox.Show("Appointment times cannot overlap.");
                         }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Select a time between 8am and 5pm.");
                     }
                 }
                 else

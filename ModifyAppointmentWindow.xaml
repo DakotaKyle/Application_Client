@@ -134,7 +134,7 @@
 
                 <ComboBoxItem Content="Presentation"/>
                 <ComboBoxItem Content="Scrum"/>
-                <ComboBoxItem Content="Stackholder"/>
+                <ComboBoxItem Content="Stakeholder"/>
                 <ComboBoxItem Content="Change Control"/>
                 <ComboBoxItem Content="Status Review"/>
                 <ComboBoxItem Content="Lessons Learned"/>

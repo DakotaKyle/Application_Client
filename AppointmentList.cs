@@ -17,6 +17,8 @@ namespace Application_Client
 
         public static BindingList<Appointment> Appointments = new();
 
+        public bool isTimeValid = true;
+
         public void initAppointment()
         {
             int appId, customerId, userId;
@@ -31,6 +33,8 @@ namespace Application_Client
 
                 DataTable appointmentTable = new();
                 appointmentTable.Load(appointmentData.ExecuteReader());
+
+                connection.Close();
 
                 foreach (DataRow row in appointmentTable.Rows)
                 {
@@ -47,8 +51,6 @@ namespace Application_Client
 
                     i++;
                 }
-
-                connection.Close();
             }
             catch (MySqlException ex)
             {
@@ -59,6 +61,27 @@ namespace Application_Client
                 if (connection != null)
                 {
                     connection.Dispose();
+                }
+            }
+        }
+
+        public void validateTimes(DateTime start, DateTime end)//StartA and endA
+        {
+            int compareStartBWithEndA, compareStartAWithEndB;
+            DateTime startSlots, endSlots;//startB and endB
+
+            foreach (Appointment time in Appointments)
+            {
+                startSlots = time.Start;
+                endSlots = time.End;
+
+                compareStartBWithEndA = DateTime.Compare(startSlots, end); //compares start B with end A.
+                compareStartAWithEndB = DateTime.Compare(start, endSlots); //compares start A with end B.
+
+                if ((compareStartAWithEndB < 0) && (compareStartBWithEndA < 0))
+                {
+                    isTimeValid = false;
+                    return;
                 }
             }
         }

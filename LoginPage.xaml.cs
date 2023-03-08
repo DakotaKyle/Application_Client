@@ -62,13 +62,17 @@ namespace Application_Client
                 if (!isvalid)
                 {
                     CultureInfo culture = CultureInfo.CurrentUICulture;
-                    if (culture.Name == "US-EN")
+                    if (culture.Name == "en-US")
                     {
                         MessageBox.Show(String.Format(culture, Properties.Resources.InvalidLoginEng));
                     }
                     else if (culture.Name == "fr-FR")
                     {
                         MessageBox.Show(String.Format(culture, Properties.Resources.InvalidLoginFr));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Only English and French are supported.");
                     }
                 }       
             }

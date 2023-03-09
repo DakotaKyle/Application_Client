@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,6 +27,7 @@ namespace Application_Client
         private MySqlConnection connection = new(connectionString);
         private CustomerList customer = new();
         private AppointmentList appointment = new();
+        private AppointmentAlert alert = new();
         private static readonly LoginPage login = new();
 
         public MainWindow()
@@ -36,15 +38,19 @@ namespace Application_Client
 
             try
             {
-                while (LoginPage.isvalid == false)
+                while (!LoginPage.isvalid)
                 {
                     Hide();
                     login.ShowDialog();
 
-                    if (LoginPage.isvalid == true)
+                    if (LoginPage.isvalid)
                     {
                         customer.initCustomer();
                         appointment.initAppointment();
+
+                        Thread alertThread = new(alert.checkTime);
+                        alertThread.Start();
+
                         Show();
                     }
                 }

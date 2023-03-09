@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace Application_Client
 {
@@ -15,12 +16,12 @@ namespace Application_Client
         {
             try
             {
-                while (LoginPage.isvalid)
+                while (LoginPage.isvalid && MainWindow.mainThread.IsAlive)
                 {
                     DateTime start, end, alertTime;
                     DateTime localTime = DateTime.Now;
                     int compareLocalTimes, compareStartTimes;
-
+         
                     foreach (Appointment app in Appointments)
                     {
                         start = app.Start;
@@ -32,11 +33,11 @@ namespace Application_Client
 
                         if (compareLocalTimes >= 0 && compareStartTimes <= 0)
                         {
-                            MessageBox.Show("You have an appointment!");
+                        MessageBox.Show("You have an appointment!");
                         }
-                    }
+                    } 
                     Thread.Sleep(60000);
-              }
+                }
             }
             catch (Exception ex)
             {

@@ -29,10 +29,12 @@ namespace Application_Client
         private AppointmentList appointment = new();
         private AppointmentAlert alert = new();
         private static readonly LoginPage login = new();
+        public static Thread mainThread { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            mainThread = Thread.CurrentThread;
             CustomerRecordDataGrid.ItemsSource = CustomerList.Customers;
             AppointmentDataGrid.ItemsSource = AppointmentList.Appointments;
 
@@ -92,55 +94,69 @@ namespace Application_Client
 
             if (CustomerRecordDataGrid.SelectedItem != null)
             {
-                MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.", "", MessageBoxButton.YesNo);
-
-                if (messageBox == MessageBoxResult.Yes)
+                try
                 {
-                    try
+                    MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.", "", MessageBoxButton.YesNo);
+
+                    if (messageBox == MessageBoxResult.Yes)
                     {
-                        Customer oldCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
-                        int customerId = oldCustomer.CustomerId;
-                        int addressId = oldCustomer.AddressId;
-                        int cityId = oldCustomer.CityId;
-                        int countryId = oldCustomer.CountryId;
-
-                        connection.Open();
-
-                        using (MySqlCommand customerCommand = new(deleteCustomerName, connection))
+                        try
                         {
-                            customerCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
-                            customerCommand.ExecuteNonQuery();
-                        }
+                            Customer oldCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
+                            int customerId = oldCustomer.CustomerId;
+                            int addressId = oldCustomer.AddressId;
+                            int cityId = oldCustomer.CityId;
+                            int countryId = oldCustomer.CountryId;
 
-                        using (MySqlCommand addressCommand = new(deleteCustomerAddress, connection))
-                        {
-                            addressCommand.Parameters.Add("@addressId", MySqlDbType.Int32).Value = addressId;
-                            addressCommand.ExecuteNonQuery();
-                        }
-                        using (MySqlCommand cityCommand = new(deleteCustomerCity, connection))
-                        {
-                            cityCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = cityId;
-                            cityCommand.ExecuteNonQuery();
-                        }
-                        using (MySqlCommand countryCommand = new(deleteCustomerCountry, connection))
-                        {
-                            countryCommand.Parameters.Add("@countryId", MySqlDbType.Int32).Value = countryId;
-                            countryCommand.ExecuteNonQuery();
-                        }
+                            connection.Open();
 
-                        connection.Close();
+                            using (MySqlCommand customerCommand = new(deleteCustomerName, connection))
+                            {
+                                customerCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
+                                customerCommand.ExecuteNonQuery();
+                            }
 
-                        customer.removeCustomer(oldCustomer);
+                            using (MySqlCommand addressCommand = new(deleteCustomerAddress, connection))
+                            {
+                                addressCommand.Parameters.Add("@addressId", MySqlDbType.Int32).Value = addressId;
+                                addressCommand.ExecuteNonQuery();
+                            }
+                            using (MySqlCommand cityCommand = new(deleteCustomerCity, connection))
+                            {
+                                cityCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = cityId;
+                                cityCommand.ExecuteNonQuery();
+                            }
+                            using (MySqlCommand countryCommand = new(deleteCustomerCountry, connection))
+                            {
+                                countryCommand.Parameters.Add("@countryId", MySqlDbType.Int32).Value = countryId;
+                                countryCommand.ExecuteNonQuery();
+                            }
+
+                            connection.Close();
+
+                            customer.removeCustomer(oldCustomer);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex is MySqlException)
+                            {
+                                MessageBox.Show("Foreign key constraint! Delete associated customer appointments and check database for invaild entries to continue.");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Error: " + ex);
+                            }
+                            connection.Dispose();
+                        }
                     }
-                    catch (Exception ex)
+                    else if (messageBox == MessageBoxResult.No)
                     {
-                        MessageBox.Show("Error: " + ex.Message);
-                        connection.Dispose();
+                        return;
                     }
                 }
-                else if (messageBox == MessageBoxResult.No)
+                catch (Exception ex)
                 {
-                    return;
+                    MessageBox.Show("Error: " + ex.Message);
                 }
             }
             else
@@ -186,54 +202,67 @@ namespace Application_Client
 
         private void DeleteAppointmentButton_Click(object sender, RoutedEventArgs e)
         {
-            String deleteAppointment = "DELETE FROM appointment WHERE appointmentId=@appointmentId";
-
-            if (AppointmentDataGrid.SelectedItem != null)
+            try
             {
-                MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.", "", MessageBoxButton.YesNo);
+                String deleteAppointment = "DELETE FROM appointment WHERE appointmentId=@appointmentId";
 
-                if (messageBox == MessageBoxResult.Yes)
+                if (AppointmentDataGrid.SelectedItem != null)
                 {
-                    try
+                    MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.", "", MessageBoxButton.YesNo);
+
+                    if (messageBox == MessageBoxResult.Yes)
                     {
-                        Appointment oldAppointment = (Appointment)AppointmentDataGrid.SelectedItem;
-                        int appointmentId = oldAppointment.AppointmentId;
-
-                        connection.Open();
-
-                        using (MySqlCommand appointmentCommand = new(deleteAppointment, connection))
+                        try
                         {
-                            appointmentCommand.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
-                            appointmentCommand.ExecuteNonQuery();
+                            Appointment oldAppointment = (Appointment)AppointmentDataGrid.SelectedItem;
+                            int appointmentId = oldAppointment.AppointmentId;
+
+                            connection.Open();
+
+                            using (MySqlCommand appointmentCommand = new(deleteAppointment, connection))
+                            {
+                                appointmentCommand.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
+                                appointmentCommand.ExecuteNonQuery();
+                            }
+
+                            connection.Close();
+
+                            appointment.removeAppointment(oldAppointment);
                         }
-
-                        connection.Close();
-
-                        appointment.removeAppointment(oldAppointment);
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex);
+                            connection.Dispose();
+                        }
                     }
-                    catch (Exception ex)
+                    else if (messageBox == MessageBoxResult.No)
                     {
-                        MessageBox.Show("Error: " + ex);
-                        connection.Dispose();
+                        return;
                     }
                 }
-                else if (messageBox == MessageBoxResult.No)
+                else
                 {
-                    return;
+                    MessageBox.Show("Select an appointment to delete.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Select an appointment to delete.");
+                MessageBox.Show("Error: " + ex);
             }
         }
 
-        private void WeekViewButton_Click(object sender, RoutedEventArgs e)
+        private void AppointmentTypesByMonth_Click(object sender, RoutedEventArgs e)
+        {
+            string type = AppointmentTypeComboBox.Text;
+            appointment.typesByMonth(type);
+        }
+
+        private void ConcultantSchedule_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void MonthViewButton_Click(object sender, RoutedEventArgs e)
+        private void TotalAppointments_Click(object sender, RoutedEventArgs e)
         {
 
         }

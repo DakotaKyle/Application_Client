@@ -95,6 +95,26 @@ namespace Application_Client
             }
         }
 
+        public void typesByMonth(String type)
+        {
+            DateTime localTime = DateTime.Now;
+            String appType = type;
+            int month = localTime.Month;
+            int count = 0;
+
+            foreach (Appointment app in Appointments)
+            {
+                if (app.Start.Month == month)
+                {
+                    if (appType == app.AppointmentType)
+                    {
+                        count++;
+                    }
+                }
+            }
+            MessageBox.Show("You have " + count + " " + appType + " appointments this month.");
+        }
+
         public void addAppointment(Appointment appointment)
         {
             Appointments.Add(appointment);

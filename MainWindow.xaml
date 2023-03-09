@@ -38,6 +38,67 @@
 
         </StackPanel>
 
+        <StackPanel Grid.Column="1" Grid.Row="0">
+
+            <Button x:Name="AppointmentTypesByMonth"
+                    
+                Content="Monthly Types"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                FontFamily="Times New Roman"
+                FontSize="24" 
+                Margin="0,0,25,0"
+                Cursor="Hand"
+                Click="AppointmentTypesByMonth_Click">
+
+            </Button>
+
+            <ComboBox x:Name="AppointmentTypeComboBox"
+                
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Times New Roman"
+                FontSize="24"
+                Width="200"
+                Margin="0,-30,20,0">
+
+                <ComboBoxItem Content="Presentation"/>
+                <ComboBoxItem Content="Scrum"/>
+                <ComboBoxItem Content="Stakeholder"/>
+                <ComboBoxItem Content="Change Control"/>
+                <ComboBoxItem Content="Status Review"/>
+                <ComboBoxItem Content="Lessons Learned"/>
+
+            </ComboBox>
+
+            <Button x:Name="ConcultantSchedule"
+                    
+                Content="Your Schedule"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                FontFamily="Times New Roman"
+                FontSize="24" 
+                Margin="0,10,25,0"
+                Cursor="Hand"
+                Click="ConcultantSchedule_Click">
+
+            </Button>
+
+            <Button x:Name="TotalAppointments"
+                    
+                Content="Total"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                FontFamily="Times New Roman"
+                FontSize="24" 
+                Margin="0,10,25,0"
+                Cursor="Hand"
+                Click="TotalAppointments_Click">
+
+            </Button>
+
+        </StackPanel>
+
         <StackPanel  Grid.Column="0" Grid.Row="1">
 
             <Label x:Name="CustomerRecordLabel"
@@ -132,32 +193,6 @@
                 Margin="29,15,0,0">
 
             </Label>
-
-            <Button x:Name="WeekViewButton"
-                    
-                    Content="Week View"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    FontFamily="Times New Roman"
-                    FontSize="16" 
-                    Margin="50,-30,0,0"
-                    Cursor="Hand"
-                    Click="WeekViewButton_Click">
-                
-            </Button>
-
-            <Button x:Name="MonthViewButton"
-                    
-                    Content="Month View"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    FontFamily="Times New Roman"
-                    FontSize="16" 
-                    Margin="250,-30,0,0"
-                    Cursor="Hand"
-                    Click="MonthViewButton_Click">
-
-            </Button>
 
             <DataGrid x:Name="AppointmentDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}"
 

@@ -49,9 +49,9 @@ namespace Application_Client
                         appointment.initAppointment();
 
                         Thread alertThread = new(alert.checkTime);
-                        alertThread.Start();
 
                         Show();
+                        alertThread.Start();
                     }
                 }
             }

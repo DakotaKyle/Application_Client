@@ -26,5 +26,6 @@ namespace Application_Client
             Start = startTime;
             End = endTime;
         }
+        public Appointment() { }
     }
 }

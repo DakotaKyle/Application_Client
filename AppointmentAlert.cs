@@ -13,26 +13,34 @@ namespace Application_Client
     {
         public void checkTime()
         {
-            while (LoginPage.isvalid)
+            try
             {
-                DateTime start;
-                DateTime localTime = DateTime.Now;
-                DateTime alertTime = localTime.AddMinutes(15);
-                int compareTimes;
-
-                foreach (Appointment app in Appointments)
+                while (LoginPage.isvalid)
                 {
-                    start = app.Start;
+                    DateTime start, end, alertTime;
+                    DateTime localTime = DateTime.Now;
+                    int compareLocalTimes, compareStartTimes;
 
-                    compareTimes = DateTime.Compare(start, alertTime);
-
-                    if (compareTimes >= 0)
+                    foreach (Appointment app in Appointments)
                     {
-                        MessageBox.Show("You have an appointment coming up!");
-                    }
+                        start = app.Start;
+                        end = app.End;
+                        alertTime = start.AddMinutes(-15);
 
+                        compareLocalTimes = DateTime.Compare(localTime, alertTime);
+                        compareStartTimes = DateTime.Compare(localTime, start);
+
+                        if (compareLocalTimes >= 0 && compareStartTimes <= 0)
+                        {
+                            MessageBox.Show("You have an appointment!");
+                        }
+                    }
                     Thread.Sleep(60000);
-                }
+              }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex);
             }
         }
     }

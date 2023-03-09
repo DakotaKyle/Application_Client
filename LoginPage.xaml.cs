@@ -62,6 +62,7 @@ namespace Application_Client
                 if (!isvalid)
                 {
                     CultureInfo culture = CultureInfo.CurrentUICulture;
+
                     if (culture.Name == "en-US")
                     {
                         MessageBox.Show(String.Format(culture, Properties.Resources.InvalidLoginEng));

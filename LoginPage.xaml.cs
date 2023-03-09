@@ -26,6 +26,7 @@ namespace Application_Client
         private MySqlConnection connection = new(connectionString);
         private string username, password;
         public static bool isvalid { get; set; }
+        public static int UserID { get; set; }
 
         public LoginPage()
         {
@@ -37,7 +38,7 @@ namespace Application_Client
             int i = 0;
             DataTable userTable = new();
             String userName, Password;
-            MySqlCommand userData = new("SELECT userName, password FROM user", connection);
+            MySqlCommand userData = new("SELECT userId, userName, password FROM user", connection);
 
             try
             {
@@ -55,6 +56,7 @@ namespace Application_Client
                     if (username == userName && password == Password)
                     {
                         isvalid = true;
+                        UserID = (int)userTable.Rows[i]["userId"];
                         return;
                     }
                 }

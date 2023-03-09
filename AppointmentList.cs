@@ -16,6 +16,7 @@ namespace Application_Client
         private MySqlConnection connection = new(connectionString);
 
         public static BindingList<Appointment> Appointments = new();
+        public static BindingList<Appointment> UserView = new();
 
         public bool isTimeValid = true;
 
@@ -115,6 +116,26 @@ namespace Application_Client
             MessageBox.Show("You have " + count + " " + appType + " appointments this month.");
         }
 
+        public void yourSchedule()
+        {
+            string name, type;
+            DateTime start, end;
+
+            foreach (Appointment app in Appointments)
+            {
+                if (app.UserId == LoginPage.UserID)
+                {
+                    name = app.CustomerName;
+                    type = app.AppointmentType;
+                    start = app.Start;
+                    end = app.End;
+
+                    Appointment newView = new(LoginPage.UserID, name, type, start, end);
+                    addView(newView);
+                }
+            }
+        }
+
         public void addAppointment(Appointment appointment)
         {
             Appointments.Add(appointment);
@@ -123,6 +144,11 @@ namespace Application_Client
         public void removeAppointment(Appointment appointment)
         {
             Appointments.Remove(appointment);
+        }
+
+        public void addView(Appointment appointment)
+        {
+            UserView.Add(appointment);
         }
     }
 }

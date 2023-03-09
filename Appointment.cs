@@ -26,6 +26,16 @@ namespace Application_Client
             Start = startTime;
             End = endTime;
         }
+
+        public Appointment(int userId, string name, String type, DateTime start, DateTime end)
+        {
+            UserId = userId;
+            CustomerName = name;
+            AppointmentType = type;
+            Start = start;
+            End = end;
+        }
+
         public Appointment() { }
     }
 }

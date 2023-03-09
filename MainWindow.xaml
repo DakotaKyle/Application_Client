@@ -90,7 +90,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 FontFamily="Times New Roman"
-                FontSize="24" 
+                FontSize="20"
                 Margin="0,10,25,0"
                 Cursor="Hand"
                 Click="TotalAppointments_Click">

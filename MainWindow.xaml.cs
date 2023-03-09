@@ -50,10 +50,8 @@ namespace Application_Client
                         customer.initCustomer();
                         appointment.initAppointment();
 
-                        Thread alertThread = new(alert.checkTime);
-
+                        (new Thread(() => { alert.checkTime(); })).Start(); //Lambda Expression to execute a thread. Using the lambda reduces code to one line.
                         Show();
-                        alertThread.Start();
                     }
                 }
             }
@@ -218,13 +216,13 @@ namespace Application_Client
                             int appointmentId = oldAppointment.AppointmentId;
 
                             connection.Open();
-
+                            
                             using (MySqlCommand appointmentCommand = new(deleteAppointment, connection))
                             {
                                 appointmentCommand.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
                                 appointmentCommand.ExecuteNonQuery();
                             }
-
+                            
                             connection.Close();
 
                             appointment.removeAppointment(oldAppointment);

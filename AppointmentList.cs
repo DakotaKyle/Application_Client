@@ -24,7 +24,8 @@ namespace Application_Client
             int appId, customerId, userId;
             int i = 0;
             String customerName, appType;
-            DateTime start, end;
+            DateTime start, end, startTimeZone, endTimeZone;
+            TimeZoneInfo timeZone;
             MySqlCommand appointmentData = new("SELECT appointment.appointmentId, appointment.customerId, appointment.userId, customer.customerName, appointment.type, appointment.start, appointment.end FROM customer JOIN appointment ON customer.customerId = appointment.customerId", connection);
 
             try
@@ -46,7 +47,15 @@ namespace Application_Client
                     start = (DateTime)appointmentTable.Rows[i]["start"];
                     end = (DateTime)appointmentTable.Rows[i]["end"];
 
-                    Appointment initAppointments = new(appId, customerId, userId, customerName, appType, start, end);
+                    timeZone = TimeZoneInfo.Local;
+                    start.ToUniversalTime();
+                    end.ToUniversalTime();
+                    startTimeZone = TimeZoneInfo.ConvertTime(start, timeZone);
+                    endTimeZone = TimeZoneInfo.ConvertTime(end, timeZone);
+                    startTimeZone.IsDaylightSavingTime();
+                    endTimeZone.IsDaylightSavingTime();
+
+                    Appointment initAppointments = new(appId, customerId, userId, customerName, appType, startTimeZone, endTimeZone);
                     addAppointment(initAppointments);
 
                     i++;

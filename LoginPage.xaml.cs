@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Globalization;
+using System.IO;
 
 namespace Application_Client
 {
@@ -47,7 +48,7 @@ namespace Application_Client
                 userTable.Load(userData.ExecuteReader());
 
                 connection.Close();
-
+                
                 foreach (DataRow row in userTable.Rows)
                 {
                     userName = userTable.Rows[i]["userName"].ToString();
@@ -86,6 +87,28 @@ namespace Application_Client
             }
         }
 
+        private void logUser()
+        {
+            var workingDirectory = Environment.CurrentDirectory;
+            var file = (workingDirectory + @"\UserLog.txt");
+
+            DateTime localTime = DateTime.Now;
+            if (!File.Exists(file))
+            {
+                using (StreamWriter sw = File.CreateText(file))
+                {
+                    sw.WriteLine(UserID.ToString() + " [" + localTime + "]\n");
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = File.AppendText(file))
+                {
+                    sw.WriteLine(UserID.ToString() + " [" + localTime + "]\n");
+                }
+            }
+        }
+
         private void Loginbuton_Click(object sender, RoutedEventArgs e)
         {
             username = UsernameTextbox.Text;
@@ -94,7 +117,10 @@ namespace Application_Client
             authenticate();
 
             if (isvalid)
+            {
+                logUser();
                 Close();
+            }
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)

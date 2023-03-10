@@ -136,6 +136,17 @@ namespace Application_Client
             }
         }
 
+        public void totalAppointments()
+        {
+            int count = 0;
+
+            foreach (Appointment app in Appointments)
+            {
+                count++;
+            }
+            MessageBox.Show("There are " + count + " appointments.");
+        }
+
         public void addAppointment(Appointment appointment)
         {
             Appointments.Add(appointment);

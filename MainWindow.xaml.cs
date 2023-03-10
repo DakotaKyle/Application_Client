@@ -264,7 +264,7 @@ namespace Application_Client
 
         private void TotalAppointments_Click(object sender, RoutedEventArgs e)
         {
-
+            appointment.totalAppointments();
         }
     }
 }

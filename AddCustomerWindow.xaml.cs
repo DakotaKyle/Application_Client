@@ -83,19 +83,19 @@ namespace Application_Client
                         cityCommand.Parameters.Add("@city", MySqlDbType.VarChar).Value = city;
                         cityCommand.Parameters.Add("@countryId", MySqlDbType.Int32).Value = countryPrimaryKey;
                         cityCommand.ExecuteNonQuery();
+
+                        cityId = (int)getCityId.ExecuteScalar();
                     }
 
                     using (MySqlCommand addressCommand = new(updateCustomerAddress, connection))
                     {
-
                         addressCommand.Parameters.Add("@address", MySqlDbType.VarChar).Value = address;
                         addressCommand.Parameters.Add("@zipCode", MySqlDbType.VarChar).Value = zip;
                         addressCommand.Parameters.Add("@phone", MySqlDbType.VarChar).Value = phone;
-                        addressCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = countryPrimaryKey;
+                        addressCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = cityId;
                         addressCommand.ExecuteNonQuery();
 
                         addressPrimaryKey = (int)getAddressForeignKey.ExecuteScalar();
-                        cityId = (int)getCityId.ExecuteScalar();
                     }
 
                     using (MySqlCommand nameCommand = new(updateCustomerName, connection))

@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,8 @@ namespace Application_Client
 
         public static BindingList<Appointment> Appointments = new();
         public static BindingList<Appointment> UserView = new();
+
+        private static ArrayList customerIDs = new() { };
 
         public bool isTimeValid = true;
 
@@ -123,15 +126,20 @@ namespace Application_Client
 
             foreach (Appointment app in Appointments)
             {
-                if (app.UserId == LoginPage.UserID)
+                if (!customerIDs.Contains(app.CustomerId))
                 {
-                    name = app.CustomerName;
-                    type = app.AppointmentType;
-                    start = app.Start;
-                    end = app.End;
+                    customerIDs.Add(app.CustomerId);
 
-                    Appointment newView = new(LoginPage.UserID, name, type, start, end);
-                    addView(newView);
+                    if (app.UserId == LoginPage.UserID)
+                    {
+                        name = app.CustomerName;
+                        type = app.AppointmentType;
+                        start = app.Start;
+                        end = app.End;
+
+                        Appointment newView = new(LoginPage.UserID, name, type, start, end);
+                        addView(newView);
+                    }
                 }
             }
         }

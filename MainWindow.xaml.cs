@@ -86,7 +86,7 @@ namespace Application_Client
         {
             String deleteCustomerName = "DELETE FROM customer WHERE customerId=@customerId";
             String deleteCustomerAddress = "DELETE FROM address WHERE addressId=@addressId";
-            String deleteCustomerCity = "DELETE FROM city WHERE cityId=@cityId";
+            String deleteCustomerCity = "DELETE FROM city WHERE countryId=@countryId";
             String deleteCustomerCountry = "DELETE FROM country WHERE countryId=@countryId";
 
 
@@ -121,7 +121,7 @@ namespace Application_Client
                             }
                             using (MySqlCommand cityCommand = new(deleteCustomerCity, connection))
                             {
-                                cityCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = cityId;
+                                cityCommand.Parameters.Add("@countryId", MySqlDbType.Int32).Value = countryId;
                                 cityCommand.ExecuteNonQuery();
                             }
                             using (MySqlCommand countryCommand = new(deleteCustomerCountry, connection))

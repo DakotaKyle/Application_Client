@@ -17,10 +17,10 @@ namespace Application_Client
         private MySqlConnection connection = new(connectionString);
 
         public static BindingList<Appointment> Appointments = new();
-        public static BindingList<Appointment> UserView = new();
+        public static BindingList<Appointment> UserWeeklyView = new();
+        public static BindingList<Appointment> UserMonthlyView = new();
 
         private static ArrayList customerIDs = new() { };
-
         public bool isTimeValid = true;
 
         public void initAppointment()
@@ -116,10 +116,17 @@ namespace Application_Client
             MessageBox.Show("You have " + count + " " + appType + " appointments this month.");
         }
 
-        public void yourSchedule()
+        public void yourWeeklySchedule()
         {
+            int compareWeekStart, compareWeekEnd, compareMonthStart, compareMonthEnd;
             string name, type;
             DateTime start, end;
+
+            DateTime sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            DateTime saturday = DateTime.Today.AddDays((int)DateTime.Today.DayOfWeek);
+
+            DateTime startOfMonth = DateTime.Today.AddDays(-(int)DateTime.Today.Day + 1);
+            DateTime endOfMonth = DateTime.Today.AddDays((int)DateTime.Today.Day + 1);
 
             foreach (Appointment app in Appointments)
             {
@@ -134,8 +141,23 @@ namespace Application_Client
                         start = app.Start;
                         end = app.End;
 
-                        Appointment newView = new(LoginPage.UserID, name, type, start, end);
-                        addView(newView);
+                        compareWeekStart = DateTime.Compare(start, sunday);
+                        compareWeekEnd = DateTime.Compare(end, saturday);
+
+                        if (compareWeekStart > 0 && compareWeekEnd < 0)
+                        {
+                            Appointment newView = new(LoginPage.UserID, name, type, start, end);
+                            addWeeklyView(newView);
+                        }
+
+                        compareMonthStart = DateTime.Compare(start, startOfMonth);
+                        compareMonthEnd = DateTime.Compare(end, endOfMonth);
+
+                        if (compareMonthStart > 0 && compareMonthEnd < 0)
+                        {
+                            Appointment newView = new(LoginPage.UserID, name, type, start, end);
+                            addMonthlyView(newView);
+                        }
                     }
                 }
             }
@@ -160,9 +182,13 @@ namespace Application_Client
             Appointments.Remove(appointment);
         }
 
-        public void addView(Appointment appointment)
+        public void addWeeklyView(Appointment appointment)
         {
-            UserView.Add(appointment);
+            UserWeeklyView.Add(appointment);
+        }
+        public void addMonthlyView(Appointment appointment)
+        {
+            UserMonthlyView.Add(appointment);
         }
     }
 }

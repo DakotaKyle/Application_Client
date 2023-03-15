@@ -257,7 +257,7 @@ namespace Application_Client
 
         private void ConcultantSchedule_Click(object sender, RoutedEventArgs e)
         {
-            appointment.yourSchedule();
+            appointment.yourWeeklySchedule();
             UserViewWindow userview = new();
             userview.ShowDialog();
         }

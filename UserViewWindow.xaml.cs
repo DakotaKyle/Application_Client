@@ -23,7 +23,8 @@ namespace Application_Client
         public UserViewWindow()
         {
             InitializeComponent();
-            UserViewDataGrid.ItemsSource = AppointmentList.UserView;
+            UserWeeklyViewDataGrid.ItemsSource = AppointmentList.UserWeeklyView;
+            UserMonthlyViewDataGrid.ItemsSource = AppointmentList.UserMonthlyView;
         }
     }
 }

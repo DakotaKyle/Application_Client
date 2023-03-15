@@ -5,24 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Application_Client"
         mc:Ignorable="d"
-        Title="UserViewWindow" Height="400" Width="700">
+        Title="UserViewWindow" Height="800" Width="1200">
     <Grid>
-        <DataGrid x:Name="UserViewDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}"
+        
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="37*"/>
+            <RowDefinition Height="355*"/>
+
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+
+            <ColumnDefinition Width="189*"/>
+            <ColumnDefinition Width="211*"/>
+
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="0">
+
+            <Label x:Name="WeeklyScheduleLabel"
+                   Content="Your Weekly Schedule"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   FontFamily="Times new roman"
+                   FontSize="36"
+                   Margin="0,0,0,0">
+            </Label>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
+
+            <DataGrid x:Name="UserWeeklyViewDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}"
                       
                 FontFamily="Times New Roman"
                 FontSize="16"
-                Height="375"
+                Height="475"
                 Margin="5,5,10,0"
                 IsReadOnly="True">
 
-            <DataGrid.Columns>
+                <DataGrid.Columns>
 
-                <DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="60*" Binding="{Binding Path=CustomerName}"/>
-                <DataGridTextColumn Header="Appointment Type" FontFamily="Times New Roman" Width="65*" Binding="{Binding Path=AppointmentType}"/>
-                <DataGridTextColumn Header="Start" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=Start}"/>
-                <DataGridTextColumn Header="End" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=End}"/>
+                    <DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="60*" Binding="{Binding Path=CustomerName}"/>
+                    <DataGridTextColumn Header="Appointment Type" FontFamily="Times New Roman" Width="65*" Binding="{Binding Path=AppointmentType}"/>
+                    <DataGridTextColumn Header="Start" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=Start}"/>
+                    <DataGridTextColumn Header="End" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=End}"/>
 
-            </DataGrid.Columns>
-        </DataGrid>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1">
+
+            <Label x:Name="MonthlyScheduleLabel"
+                   Content="Your Monthly Schedule"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   FontFamily="Times new roman"
+                   FontSize="36"
+                   Margin="0,0,0,0">
+
+            </Label>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1">
+
+            <DataGrid x:Name="UserMonthlyViewDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}"
+                      
+                FontFamily="Times New Roman"
+                FontSize="16"
+                Height="475"
+                Margin="5,5,10,0"
+                IsReadOnly="True">
+
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Header="Name" FontFamily="Times New Roman" Width="60*" Binding="{Binding Path=CustomerName}"/>
+                    <DataGridTextColumn Header="Appointment Type" FontFamily="Times New Roman" Width="65*" Binding="{Binding Path=AppointmentType}"/>
+                    <DataGridTextColumn Header="Start" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=Start}"/>
+                    <DataGridTextColumn Header="End" FontFamily="Times New Roman" Width="75*" Binding="{Binding Path=End}"/>
+
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </StackPanel>
     </Grid>
 </Window>

@@ -38,7 +38,8 @@ namespace Application_Client
         {
             int appointmentId, userId;
             String appType, startString, endString;
-            DateTime start, end;
+            DateTime start, end, startTimeZone, endTimeZone;
+            TimeZoneInfo timeZone;
 
             MySqlCommand getAppointmentId = new("SELECT appointmentId FROM appointment ORDER BY appointmentId Desc", connection);
             MySqlCommand getUserId = new("SELECT userId FROM user ORDER BY userId Desc", connection);
@@ -60,6 +61,11 @@ namespace Application_Client
 
                     if ((start.Hour >= 8 && start.Hour <= 17) && (end.Hour >= 8 && end.Hour <= 17))
                     {
+                        timeZone = TimeZoneInfo.Local;
+
+                        startTimeZone = TimeZoneInfo.ConvertTimeFromUtc(start, timeZone);
+                        endTimeZone = TimeZoneInfo.ConvertTimeFromUtc(end, timeZone);
+
                         appointmentList.validateTimes(start, end);
 
                         if (appointmentList.isTimeValid)
@@ -86,7 +92,7 @@ namespace Application_Client
 
                                     connection.Close();
 
-                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start, end);
+                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, startTimeZone, endTimeZone);
                                     appointmentList.addAppointment(newAppointment);
                                     Close();
                                 }

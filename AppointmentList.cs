@@ -52,12 +52,9 @@ namespace Application_Client
                     end = (DateTime)appointmentTable.Rows[i]["end"];
 
                     timeZone = TimeZoneInfo.Local;
-                    start.ToUniversalTime();
-                    end.ToUniversalTime();
-                    startTimeZone = TimeZoneInfo.ConvertTime(start, timeZone);
-                    endTimeZone = TimeZoneInfo.ConvertTime(end, timeZone);
-                    startTimeZone.IsDaylightSavingTime();
-                    endTimeZone.IsDaylightSavingTime();
+
+                    startTimeZone = TimeZoneInfo.ConvertTimeFromUtc(start, timeZone);
+                    endTimeZone = TimeZoneInfo.ConvertTimeFromUtc(end, timeZone);
 
                     Appointment initAppointments = new(appId, customerId, userId, customerName, appType, startTimeZone, endTimeZone);
                     addAppointment(initAppointments);
@@ -146,13 +143,11 @@ namespace Application_Client
 
         public void totalAppointments()
         {
-            int count = 0;
+            int i;
 
-            foreach (Appointment app in Appointments)
-            {
-                count++;
-            }
-            MessageBox.Show("There are " + count + " appointments.");
+            for (i = 0; i < Appointments.Count; i++) ;
+            
+            MessageBox.Show("There are " + i + " appointments.");
         }
 
         public void addAppointment(Appointment appointment)

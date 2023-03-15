@@ -70,7 +70,7 @@ namespace Application_Client
 
         private void ModifyCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CustomerRecordDataGrid.SelectedItem != null)
+            if (CustomerRecordDataGrid.SelectedItem is not null)
             {
                 Customer thisCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
                 ModifyCustomerWindow modifyCustomer = new(thisCustomer);
@@ -90,7 +90,7 @@ namespace Application_Client
             String deleteCustomerCountry = "DELETE FROM country WHERE countryId=@countryId";
 
 
-            if (CustomerRecordDataGrid.SelectedItem != null)
+            if (CustomerRecordDataGrid.SelectedItem is not null)
             {
                 try
                 {
@@ -138,7 +138,7 @@ namespace Application_Client
                         {
                             if (ex is MySqlException)
                             {
-                                MessageBox.Show("Foreign key constraint! Delete associated customer appointments and check database for invaild entries to continue.");
+                                MessageBox.Show("Delete associated customer appointments and check database for invaild entries to continue.");
                             }
                             else
                             {
@@ -165,7 +165,7 @@ namespace Application_Client
 
         private void AddAppointmentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CustomerRecordDataGrid.SelectedItem != null)
+            if (CustomerRecordDataGrid.SelectedItem is not null)
             {
                 Customer thisCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
                 AddAppointmentWindow addAppointment = new(thisCustomer);
@@ -179,7 +179,7 @@ namespace Application_Client
 
         private void ModifyAppointmentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (AppointmentDataGrid.SelectedItem != null)
+            if (AppointmentDataGrid.SelectedItem is not null)
             {
                 try
                 {
@@ -204,7 +204,7 @@ namespace Application_Client
             {
                 String deleteAppointment = "DELETE FROM appointment WHERE appointmentId=@appointmentId";
 
-                if (AppointmentDataGrid.SelectedItem != null)
+                if (AppointmentDataGrid.SelectedItem is not null)
                 {
                     MessageBoxResult messageBox = MessageBox.Show("Are you sure you want to detele this customer? This process cannot be undone.", "", MessageBoxButton.YesNo);
 

@@ -36,6 +36,7 @@ namespace Application_Client
 
         private void authenticate()
         {
+            
             int i = 0;
             DataTable userTable = new();
             String userName, Password;
@@ -49,7 +50,7 @@ namespace Application_Client
 
                 connection.Close();
                 
-                foreach (DataRow row in userTable.Rows)
+                foreach (DataRow row in userTable.Select().Where(e => e.ToString().Any()))//Lamba expression to get username and passwords from the data table.
                 {
                     userName = userTable.Rows[i]["userName"].ToString();
                     Password = userTable.Rows[i]["password"].ToString();

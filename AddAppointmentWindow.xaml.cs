@@ -45,6 +45,7 @@ namespace Application_Client
             MySqlCommand getUserId = new("SELECT userId FROM user ORDER BY userId Desc", connection);
 
             string addApointment = "INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES (@customerId, @userId, 0, 0, 0, 0, @type, 0, @start, @end, 03/01/2023, 0, 0, 0)";
+
             if (AppointmentComboBox.SelectedItem is not null && StartDatePicker.SelectedDate is not null &&
                  StartTimeTextBox.Text.Length >= 1 && EndDatePicker.SelectedDate is not null &&
                  EndTimeTextBox.Text.Length >= 1)

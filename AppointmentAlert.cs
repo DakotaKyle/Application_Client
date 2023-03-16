@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace Application_Client
 {
     class AppointmentAlert : AppointmentList
     {
+        private static String connectionString = "Host=localhost;Port=3306;Database=client_schedule;Username=sqlUser;Password=Passw0rd!";
+        private MySqlConnection connection = new(connectionString);
+
         public void checkTime()
         {
             try
@@ -21,7 +25,7 @@ namespace Application_Client
                     DateTime start, end, alertTime;
                     DateTime localTime = DateTime.Now;
                     int compareLocalTimes, compareStartTimes;
-         
+
                     foreach (Appointment app in Appointments)
                     {
                         start = app.Start;
@@ -32,11 +36,10 @@ namespace Application_Client
                         compareStartTimes = DateTime.Compare(localTime, start);
 
                         if (compareLocalTimes >= 0 && compareStartTimes <= 0)
-                        {
-                        MessageBox.Show("You have an appointment!");
-                        }
-                    } 
-                    Thread.Sleep(60000);
+                            MessageBox.Show("You have an appointment!");
+                        
+                    }
+                        Thread.Sleep(60000);
                 }
             }
             catch (Exception ex)

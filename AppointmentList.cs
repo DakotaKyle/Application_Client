@@ -165,11 +165,9 @@ namespace Application_Client
 
         public void totalAppointments()
         {
-            int i;
-
-            for (i = 0; i < Appointments.Count; i++) ;
+            int count = Appointments.Count;
             
-            MessageBox.Show("There are " + i + " appointments.");
+            MessageBox.Show("There are " + count + " appointments.");
         }
 
         public void addAppointment(Appointment appointment)

@@ -50,7 +50,7 @@ namespace Application_Client
                         customer.initCustomer();
                         appointment.initAppointment();
 
-                        (new Thread(() => { alert.checkTime(); })).Start(); //Lambda Expression to execute a thread. Using the lambda reduces code to one line.
+                        (new Thread(() => { alert.checkTime(); })).Start(); //Lambda Expression to check user time an alert user of upcoming appointments.
                         Show();
                     }
                 }

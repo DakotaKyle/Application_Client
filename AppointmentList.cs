@@ -20,7 +20,7 @@ namespace Application_Client
         public static BindingList<Appointment> UserWeeklyView = new();
         public static BindingList<Appointment> UserMonthlyView = new();
 
-        private static ArrayList customerIDs = new() { };
+        public static ArrayList customerIDs = new() { };
         public bool isTimeValid = true;
 
         public void initAppointment()
@@ -52,12 +52,11 @@ namespace Application_Client
                     end = (DateTime)appointmentTable.Rows[i]["end"];
 
                     timeZone = TimeZoneInfo.Local;
-
                     startTimeZone = TimeZoneInfo.ConvertTimeFromUtc(start, timeZone);
                     endTimeZone = TimeZoneInfo.ConvertTimeFromUtc(end, timeZone);
 
-                    Appointment initAppointments = new(appId, customerId, userId, customerName, appType, startTimeZone, endTimeZone);
-                    addAppointment(initAppointments);
+                    Appointment newAppointment = new(appId, customerId, userId, customerName, appType, startTimeZone, endTimeZone);
+                    addAppointment(newAppointment);
 
                     i++;
                 }
@@ -75,7 +74,7 @@ namespace Application_Client
             }
         }
 
-        public void validateTimes(DateTime start, DateTime end)//StartA and endA
+        public void validateTimes(DateTime start, DateTime end)//startA and endA
         {
             int compareStartBWithEndA, compareStartAWithEndB;
             DateTime startSlots, endSlots;//startB and endB
@@ -123,7 +122,7 @@ namespace Application_Client
             DateTime start, end;
 
             DateTime sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
-            DateTime saturday = DateTime.Today.AddDays((int)DateTime.Today.DayOfWeek);
+            DateTime saturday = sunday.AddDays(6);
 
             DateTime startOfMonth = DateTime.Today.AddDays(-(int)DateTime.Today.Day + 1);
             DateTime endOfMonth = DateTime.Today.AddDays((int)DateTime.Today.Day + 1);

@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,9 @@ namespace Application_Client
         Appointment oldAppointment;
         int appointmentId, customerId, userId;
         String customerName, appType, startString, endString;
-        DateTime start, end;
+        String userTimes = "SELECT start, end FROM appointment WHERE appointmentId=@appointmentId";
+        DateTime start, end, startTimeZone, endTimeZone;
+        TimeZoneInfo timeZone;
 
         public ModifyAppointmentWindow(Appointment appointment)
         {
@@ -39,8 +42,31 @@ namespace Application_Client
             AppointmentComboBox.Text = appointment.AppointmentType;
             StartDatePicker.SelectedDate = appointment.Start;
             EndDatePicker.SelectedDate = appointment.End;
-            StartTimeTextBox.Text = appointment.Start.ToShortTimeString();
-            EndTimeTextBox.Text = appointment.End.ToShortTimeString();
+
+            DataTable times = new();
+            String startTimeString, endTimeString;
+
+            connection.Open();
+
+            using (MySqlCommand selectTimes = new(userTimes, connection))
+            {
+                selectTimes.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointment.AppointmentId;
+                times.Load(selectTimes.ExecuteReader());
+
+                startTimeString = times.Rows[0]["start"].ToString();
+                endTimeString = times.Rows[0]["end"].ToString();
+
+                if (DateTime.TryParse(startTimeString, out DateTime startTimeZone) && DateTime.TryParse(endTimeString, out DateTime endTimeZone))
+                {
+                    StartTimeTextBox.Text = startTimeZone.ToShortTimeString();
+                    EndTimeTextBox.Text = endTimeZone.ToShortTimeString();
+                }
+                else
+                    MessageBox.Show("An unexpected error has occurred. Invalid start or end time was generated.");
+            }
+
+            connection.Close();
+
             oldAppointment = appointment;
         }
 
@@ -62,44 +88,57 @@ namespace Application_Client
                     start = startDateTime;
                     end = endDateTime;
 
-                    using (MySqlConnection con = new(connectionString))
+                    if ((start.Hour >= 8 && start.Hour <= 17) && (end.Hour >= 8 && end.Hour <= 17))
                     {
-                        try
-                        {
-                            connection.Open();
+                        timeZone = TimeZoneInfo.Local;
 
-                            using (MySqlCommand updateAppointmentCommand = new(modifyAppointment, connection))
+                        startTimeZone = TimeZoneInfo.ConvertTimeFromUtc(start, timeZone);
+                        endTimeZone = TimeZoneInfo.ConvertTimeFromUtc(end, timeZone);
+
+                        appointments.validateTimes(start, end);
+
+                        if (appointments.isTimeValid)
+                        {
+                            using (MySqlConnection con = new(connectionString))
                             {
-                                updateAppointmentCommand.Parameters.Add("@type", MySqlDbType.VarChar).Value = appType;
-                                updateAppointmentCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start;
-                                updateAppointmentCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end;
-                                updateAppointmentCommand.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
-                                updateAppointmentCommand.ExecuteNonQuery();
+                                try
+                                {
+                                    connection.Open();
+
+                                    using (MySqlCommand updateAppointmentCommand = new(modifyAppointment, connection))
+                                    {
+                                        updateAppointmentCommand.Parameters.Add("@type", MySqlDbType.VarChar).Value = appType;
+                                        updateAppointmentCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start;
+                                        updateAppointmentCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end;
+                                        updateAppointmentCommand.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
+                                        updateAppointmentCommand.ExecuteNonQuery();
+                                    }
+
+                                    connection.Close();
+
+                                    appointments.removeAppointment(oldAppointment);
+                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, startTimeZone, endTimeZone);
+                                    appointments.addAppointment(newAppointment);
+                                    Close();
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Error: " + ex);
+                                    connection.Dispose();
+                                }
                             }
-
-                            connection.Close();
-
-                            appointments.removeAppointment(oldAppointment);
-                            Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start, end);
-                            appointments.addAppointment(newAppointment);
-                            Close();
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Error: " + ex);
-                            connection.Dispose();
-                        }
+                        else
+                            MessageBox.Show("Appointment times cannot overlap.");
                     }
+                    else
+                        MessageBox.Show("Appointment times must be within business hours.");
                 }
                 else
-                {
                     MessageBox.Show("Enter a valid date or time to continue.");
-                }
             }
             else
-            {
                 MessageBox.Show("All fields are required to continue.");
-            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

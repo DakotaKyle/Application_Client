@@ -49,6 +49,7 @@ namespace Application_Client
             String name, address, city, zipcode, country, phone;
             String modifyName = "UPDATE customer SET customerName=@name WHERE customerId=@customerId";
             String modifyAddress = "UPDATE address SET address=@address, postalCode=@postalCode, phone=@phone WHERE addressId=@addressId";
+            String modifyCity = "UPDATE city SET city=@city WHERE cityId=@cityId";
             String modifyCountry = "UPDATE country SET country=@country WHERE countryId=@countryId";
 
             if (NameTextBox.Text.Length >= 1 && AddressTextBox.Text.Length >= 1 &&
@@ -82,6 +83,13 @@ namespace Application_Client
                             updateAddressCommand.Parameters.Add("@phone", MySqlDbType.VarChar).Value = phone;
                             updateAddressCommand.Parameters.Add("@addressId", MySqlDbType.Int32).Value = addressId;
                             updateAddressCommand.ExecuteNonQuery();
+                        }
+
+                        using (MySqlCommand updateCityCommand = new(modifyCity, connection))
+                        {
+                            updateCityCommand.Parameters.Add("@city", MySqlDbType.VarChar).Value = city;
+                            updateCityCommand.Parameters.Add("@cityId", MySqlDbType.Int32).Value = cityId;
+                            updateCityCommand.ExecuteNonQuery();
                         }
 
                         using (MySqlCommand updateCountryCommand = new(modifyCountry, connection))

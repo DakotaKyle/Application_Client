@@ -168,8 +168,22 @@ namespace Application_Client
             if (CustomerRecordDataGrid.SelectedItem is not null)
             {
                 Customer thisCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
-                AddAppointmentWindow addAppointment = new(thisCustomer);
-                addAppointment.ShowDialog();
+                int j = 0;
+
+                foreach (Appointment app in AppointmentList.Appointments)
+                {
+                    if (app.CustomerId == thisCustomer.CustomerId)
+                    {
+                        MessageBox.Show("This customer already has an appointment. Consider modifying the existing appointment.");
+                        j++;
+                        break;
+                    }
+                }
+                if (j == 0)
+                {
+                    AddAppointmentWindow addAppointment = new(thisCustomer);
+                    addAppointment.ShowDialog();
+                }
             }
             else
             {

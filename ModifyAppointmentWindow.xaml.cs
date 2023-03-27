@@ -28,8 +28,7 @@ namespace Application_Client
         int appointmentId, customerId, userId;
         String customerName, appType, startString, endString;
         String userTimes = "SELECT start, end FROM appointment WHERE appointmentId=@appointmentId";
-        DateTime start, end, startTimeZone, endTimeZone;
-        TimeZoneInfo timeZone;
+        DateTime start, end;
 
         public ModifyAppointmentWindow(Appointment appointment)
         {
@@ -56,10 +55,10 @@ namespace Application_Client
                 startTimeString = times.Rows[0]["start"].ToString();
                 endTimeString = times.Rows[0]["end"].ToString();
 
-                if (DateTime.TryParse(startTimeString, out DateTime startTimeZone) && DateTime.TryParse(endTimeString, out DateTime endTimeZone))
+                if (DateTime.TryParse(startTimeString, out DateTime startTime) && DateTime.TryParse(endTimeString, out DateTime endTime))
                 {
-                    StartTimeTextBox.Text = startTimeZone.ToShortTimeString();
-                    EndTimeTextBox.Text = endTimeZone.ToShortTimeString();
+                    StartTimeTextBox.Text = startTime.ToShortTimeString();
+                    EndTimeTextBox.Text = endTime.ToShortTimeString();
                 }
                 else
                     MessageBox.Show("An unexpected error has occurred. Invalid start or end time was generated.");
@@ -90,12 +89,7 @@ namespace Application_Client
 
                     if ((start.Hour >= 8 && start.Hour <= 17) && (end.Hour >= 8 && end.Hour <= 17))
                     {
-                        timeZone = TimeZoneInfo.Local;
-
-                        startTimeZone = TimeZoneInfo.ConvertTimeFromUtc(start, timeZone);
-                        endTimeZone = TimeZoneInfo.ConvertTimeFromUtc(end, timeZone);
-
-                        appointments.validateTimes(start, end);
+                        appointments.validateTimes(start, end, appointmentId);
 
                         if (appointments.isTimeValid)
                         {
@@ -117,7 +111,7 @@ namespace Application_Client
                                     connection.Close();
 
                                     appointments.removeAppointment(oldAppointment);
-                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, startTimeZone, endTimeZone);
+                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start, end);
                                     appointments.addAppointment(newAppointment);
                                     Close();
                                 }

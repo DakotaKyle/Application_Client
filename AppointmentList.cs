@@ -28,8 +28,7 @@ namespace Application_Client
             int appId, customerId, userId;
             int i = 0;
             String customerName, appType;
-            DateTime start, end, startTimeZone, endTimeZone;
-            TimeZoneInfo timeZone;
+            DateTime start, end;
             MySqlCommand appointmentData = new("SELECT appointment.appointmentId, appointment.customerId, appointment.userId, customer.customerName, appointment.type, appointment.start, appointment.end FROM customer JOIN appointment ON customer.customerId = appointment.customerId", connection);
 
             try
@@ -51,11 +50,7 @@ namespace Application_Client
                     start = (DateTime)appointmentTable.Rows[i]["start"];
                     end = (DateTime)appointmentTable.Rows[i]["end"];
 
-                    timeZone = TimeZoneInfo.Local;
-                    startTimeZone = TimeZoneInfo.ConvertTimeFromUtc(start, timeZone);
-                    endTimeZone = TimeZoneInfo.ConvertTimeFromUtc(end, timeZone);
-
-                    Appointment newAppointment = new(appId, customerId, userId, customerName, appType, startTimeZone, endTimeZone);
+                    Appointment newAppointment = new(appId, customerId, userId, customerName, appType, start, end);
                     addAppointment(newAppointment);
 
                     i++;
@@ -95,6 +90,27 @@ namespace Application_Client
             }
         }
 
+        public void validateTimes(DateTime start, DateTime end, int appointmentId)
+        {
+            int compareStartBWithEndA, compareStartAWithEndB;
+            DateTime startSlots, endSlots;//startB and endB
+
+            foreach (Appointment time in Appointments)
+            {
+                startSlots = time.Start;
+                endSlots = time.End;
+
+                compareStartBWithEndA = DateTime.Compare(startSlots, end); //compares start B with end A.
+                compareStartAWithEndB = DateTime.Compare(start, endSlots); //compares start A with end B.
+
+                if ((compareStartAWithEndB < 0) && (compareStartBWithEndA < 0) && (time.AppointmentId != appointmentId))
+                {
+                    isTimeValid = false;
+                    return;
+                }
+            }
+        }
+
         public void typesByMonth(String type)
         {
             DateTime localTime = DateTime.Now;
@@ -121,29 +137,27 @@ namespace Application_Client
             string name, type;
             DateTime start, end;
 
+            int daysInMonth = DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month);
+
             DateTime sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
             DateTime saturday = sunday.AddDays(6);
 
             DateTime startOfMonth = DateTime.Today.AddDays(-(int)DateTime.Today.Day + 1);
-            DateTime endOfMonth = DateTime.Today.AddDays((int)DateTime.Today.Day + 1);
+            DateTime endOfMonth = startOfMonth.AddDays(daysInMonth - 1);
 
             foreach (Appointment app in Appointments)
             {
-                if (!customerIDs.Contains(app.CustomerId))
+                if (app.UserId == LoginPage.UserID)
                 {
-                    customerIDs.Add(app.CustomerId);
+                    name = app.CustomerName;
+                    type = app.AppointmentType;
+                    start = app.Start.ToLocalTime();
+                    end = app.End.ToLocalTime();
 
-                    if (app.UserId == LoginPage.UserID)
-                    {
-                        name = app.CustomerName;
-                        type = app.AppointmentType;
-                        start = app.Start;
-                        end = app.End;
+                    compareWeekStart = DateTime.Compare(start, sunday);
+                    compareWeekEnd = DateTime.Compare(end, saturday);
 
-                        compareWeekStart = DateTime.Compare(start, sunday);
-                        compareWeekEnd = DateTime.Compare(end, saturday);
-
-                        if (compareWeekStart > 0 && compareWeekEnd < 0)
+                    if (compareWeekStart > 0 && compareWeekEnd < 0)
                         {
                             Appointment newView = new(LoginPage.UserID, name, type, start, end);
                             addWeeklyView(newView);
@@ -157,7 +171,6 @@ namespace Application_Client
                             Appointment newView = new(LoginPage.UserID, name, type, start, end);
                             addMonthlyView(newView);
                         }
-                    }
                 }
             }
         }

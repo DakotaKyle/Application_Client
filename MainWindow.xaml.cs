@@ -168,22 +168,8 @@ namespace Application_Client
             if (CustomerRecordDataGrid.SelectedItem is not null)
             {
                 Customer thisCustomer = (Customer)CustomerRecordDataGrid.SelectedItem;
-                int j = 0;
-
-                foreach (Appointment app in AppointmentList.Appointments)
-                {
-                    if (app.CustomerId == thisCustomer.CustomerId)
-                    {
-                        MessageBox.Show("This customer already has an appointment. Consider modifying the existing appointment.");
-                        j++;
-                        break;
-                    }
-                }
-                if (j == 0)
-                {
-                    AddAppointmentWindow addAppointment = new(thisCustomer);
-                    addAppointment.ShowDialog();
-                }
+                AddAppointmentWindow addAppointment = new(thisCustomer);
+                addAppointment.ShowDialog();
             }
             else
             {
@@ -274,6 +260,9 @@ namespace Application_Client
             appointment.yourWeeklySchedule();
             UserViewWindow userview = new();
             userview.ShowDialog();
+
+            AppointmentList.UserMonthlyView.Clear();
+            AppointmentList.UserWeeklyView.Clear();
         }
 
         private void TotalAppointments_Click(object sender, RoutedEventArgs e)

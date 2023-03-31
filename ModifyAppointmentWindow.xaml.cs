@@ -102,8 +102,8 @@ namespace Application_Client
                                     using (MySqlCommand updateAppointmentCommand = new(modifyAppointment, connection))
                                     {
                                         updateAppointmentCommand.Parameters.Add("@type", MySqlDbType.VarChar).Value = appType;
-                                        updateAppointmentCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start;
-                                        updateAppointmentCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end;
+                                        updateAppointmentCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start.ToUniversalTime();
+                                        updateAppointmentCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end.ToUniversalTime();
                                         updateAppointmentCommand.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
                                         updateAppointmentCommand.ExecuteNonQuery();
                                     }

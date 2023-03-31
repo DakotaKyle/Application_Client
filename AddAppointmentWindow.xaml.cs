@@ -78,8 +78,8 @@ namespace Application_Client
                                         addCommand.Parameters.Add("@customerId", MySqlDbType.Int32).Value = customerId;
                                         addCommand.Parameters.Add("@userId", MySqlDbType.Int32).Value = userId;
                                         addCommand.Parameters.Add("@type", MySqlDbType.VarChar).Value = appType;
-                                        addCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start;
-                                        addCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end;
+                                        addCommand.Parameters.Add("@start", MySqlDbType.DateTime).Value = start.ToUniversalTime();
+                                        addCommand.Parameters.Add("@end", MySqlDbType.DateTime).Value = end.ToUniversalTime();
                                         addCommand.ExecuteNonQuery();
 
                                         appointmentId = (int)getAppointmentId.ExecuteScalar();

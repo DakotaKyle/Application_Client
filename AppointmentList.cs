@@ -50,7 +50,7 @@ namespace Application_Client
                     start = (DateTime)appointmentTable.Rows[i]["start"];
                     end = (DateTime)appointmentTable.Rows[i]["end"];
 
-                    Appointment newAppointment = new(appId, customerId, userId, customerName, appType, start, end);
+                    Appointment newAppointment = new(appId, customerId, userId, customerName, appType, start.ToLocalTime(), end.ToLocalTime());
                     addAppointment(newAppointment);
 
                     i++;
@@ -157,7 +157,7 @@ namespace Application_Client
                     compareWeekStart = DateTime.Compare(start, sunday);
                     compareWeekEnd = DateTime.Compare(end, saturday);
 
-                    if (compareWeekStart > 0 && compareWeekEnd < 0)
+                    if ((compareWeekStart >= 0) && (compareWeekEnd <= 0))
                         {
                             Appointment newView = new(LoginPage.UserID, name, type, start, end);
                             addWeeklyView(newView);
@@ -166,7 +166,7 @@ namespace Application_Client
                         compareMonthStart = DateTime.Compare(start, startOfMonth);
                         compareMonthEnd = DateTime.Compare(end, endOfMonth);
 
-                        if (compareMonthStart > 0 && compareMonthEnd < 0)
+                        if ((compareMonthStart >= 0) && (compareMonthEnd <= 0))
                         {
                             Appointment newView = new(LoginPage.UserID, name, type, start, end);
                             addMonthlyView(newView);

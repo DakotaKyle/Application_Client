@@ -52,8 +52,8 @@ namespace Application_Client
                 selectTimes.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointment.AppointmentId;
                 times.Load(selectTimes.ExecuteReader());
 
-                startTimeString = times.Rows[0]["start"].ToString();
-                endTimeString = times.Rows[0]["end"].ToString();
+                startTimeString = ((DateTime)times.Rows[0]["start"]).ToLocalTime().ToString();
+                endTimeString = ((DateTime)times.Rows[0]["end"]).ToLocalTime().ToString();
 
                 if (DateTime.TryParse(startTimeString, out DateTime startTime) && DateTime.TryParse(endTimeString, out DateTime endTime))
                 {
@@ -111,7 +111,7 @@ namespace Application_Client
                                     connection.Close();
 
                                     appointments.removeAppointment(oldAppointment);
-                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start, end);
+                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start.ToLocalTime(), end.ToLocalTime());
                                     appointments.addAppointment(newAppointment);
                                     Close();
                                 }

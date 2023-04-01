@@ -87,7 +87,7 @@ namespace Application_Client
 
                                     connection.Close();
 
-                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start, end);
+                                    Appointment newAppointment = new(appointmentId, customerId, userId, customerName, appType, start.ToLocalTime(), end.ToLocalTime());
                                     appointmentList.addAppointment(newAppointment);
                                     Close();
                                 }
